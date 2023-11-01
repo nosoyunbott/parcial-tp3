@@ -3,12 +3,15 @@ package com.ar.parcialtp3.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.navigation.findNavController
 import com.ar.parcialtp3.R
 
 class StartFragment : Fragment() {
@@ -33,7 +36,8 @@ class StartFragment : Fragment() {
         edtPhone = v.findViewById(R.id.edtPhone)
         edtImage = v.findViewById(R.id.edtImage)
         btnLogin = v.findViewById(R.id.btnLogin)
-        sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         return v
     }
 
@@ -43,21 +47,28 @@ class StartFragment : Fragment() {
         val editor = sharedPreferences.edit()
 
         btnLogin.setOnClickListener {
-            if ((validate(edtName.toString()) && isNumeric(edtName.toString())) && (validate(
-                    edtPhone.toString()
-                ) && isOnlyLetters(edtPhone.toString())) && validate(
-                    edtImage.toString()
+            if ((validate(edtName.text.toString()) && isOnlyLetters(edtName.text.toString())) && (validate(
+                    edtPhone.text.toString()
+                ) && isNumeric(edtPhone.text.toString())) && validate(
+                    edtImage.text.toString()
                 )
             ) {
-                editor.putString("username", edtName.toString())
-                editor.putString("phone", edtPhone.toString())
-                editor.putString("image", edtImage.toString())
+                editor.putString("username", edtName.text.toString())
+                editor.putString("phone", edtPhone.text.toString())
+                editor.putString("image", edtImage.text.toString())
                 editor.apply()
 
+                Log.d("TEST", isNumeric(edtName.text.toString()).toString())
+
+                Toast.makeText(requireContext(), "Bienvenido, ${edtName.text}!", Toast.LENGTH_SHORT)
+
+                val action = StartFragmentDirections.actionStartFragmentToMainActivity()
+                v.findNavController().navigate(action)
+
+            } else {
+                Toast.makeText(requireContext(), "Hubo un error!", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
     private fun validate(validation: String): Boolean {
