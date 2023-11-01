@@ -1,19 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.StartFragment">
+    tools:context=".fragments.StartFragment" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textSize="35sp"
+        android:text="Iniciar sesión"/>
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtRegister"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Nombre"
+        android:paddingStart="12dp" />
+
+    <EditText
+        android:id="@+id/edtPhone"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/edtName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Teléfono"
+        android:paddingStart="12dp" />
+
+    <EditText
+        android:id="@+id/edtImage"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/edtPhone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="16dp"
+        android:hint="URL de Imagen"
+        android:paddingStart="12dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edtImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="16dp"
+        android:text="INICIAR SESIÓN" />
+
+</RelativeLayout>
