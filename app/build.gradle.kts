@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.ar.parcialtp3"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ar.parcialtp3"
         minSdk = 27
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
