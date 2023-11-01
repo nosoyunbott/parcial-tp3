@@ -58,8 +58,6 @@ class StartFragment : Fragment() {
                 editor.putString("image", edtImage.text.toString())
                 editor.apply()
 
-                Log.d("TEST", isNumeric(edtName.text.toString()).toString())
-
                 Toast.makeText(requireContext(), "Bienvenido, ${edtName.text}!", Toast.LENGTH_SHORT)
 
                 val action = StartFragmentDirections.actionStartFragmentToMainActivity()
