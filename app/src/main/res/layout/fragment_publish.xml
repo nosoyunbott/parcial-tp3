@@ -6,7 +6,7 @@
 
 
     <TextView
-        android:id="@+id/registerTextView"
+        android:id="@+id/txtRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -15,10 +15,10 @@
         android:text="Publica tu mascota" />
 
     <EditText
-        android:id="@+id/ageEdt"
+        android:id="@+id/edtAge"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/registerTextView"
+        android:layout_below="@+id/txtRegister"
         android:layout_marginTop="7dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -32,15 +32,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Edad Invalida"
-        android:layout_below="@+id/ageEdt"
+        android:layout_below="@+id/edtAge"
         android:textColor="#FF0000"
         android:visibility="gone" />
 
     <EditText
-        android:id="@+id/nameEdt"
+        android:id="@+id/edtName"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/ageEdt"
+        android:layout_below="@+id/edtAge"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -53,11 +53,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Apellido invalido"
-        android:layout_below="@+id/nameEdt"
+        android:layout_below="@+id/edtName"
         android:textColor="#FF0000"
         android:visibility="gone" />
     <Spinner
-        android:id="@+id/raceSpn"
+        android:id="@+id/spnRace"
         android:layout_width="300dp"
         android:layout_below="@+id/errNameEdt"
         android:layout_height="45dp"
@@ -69,9 +69,9 @@
         android:layout_marginEnd="16dp" />
 
     <Spinner
-        android:id="@+id/subRaceSpn"
+        android:id="@+id/spnSubRace"
         android:layout_width="300dp"
-        android:layout_below="@+id/raceSpn"
+        android:layout_below="@+id/spnRace"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
@@ -82,9 +82,9 @@
 
 
     <Spinner
-        android:id="@+id/locationSpn"
+        android:id="@+id/spnLocation"
         android:layout_width="300dp"
-        android:layout_below="@+id/subRaceSpn"
+        android:layout_below="@+id/spnSubRace"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
@@ -95,10 +95,10 @@
 
 
     <EditText
-        android:id="@+id/descriptionEdt"
+        android:id="@+id/edtDescription"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/locationSpn"
+        android:layout_below="@+id/spnLocation"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -107,20 +107,20 @@
         android:hint="Descripcion" />
 
     <TextView
-        android:id="@+id/errDescriptionTxt"
+        android:id="@+id/txtErrDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Descripcion invalida"
-        android:layout_below="@+id/descriptionEdt"
+        android:layout_below="@+id/edtDescription"
         android:textColor="#FF0000"
         android:visibility="gone" />
 
     <EditText
-        android:id="@+id/observationEdt"
+        android:id="@+id/edtObservation"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/errDescriptionTxt"
+        android:layout_below="@+id/txtErrDescription"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -129,19 +129,19 @@
         android:hint="Observacion" />
 
     <TextView
-        android:id="@+id/errObservationTxt"
+        android:id="@+id/txtErrObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Mail invalido"
-        android:layout_below="@+id/observationEdt"
+        android:layout_below="@+id/edtObservation"
         android:textColor="#FF0000"
         android:visibility="gone" />
     <EditText
-        android:id="@+id/weightEdt"
+        android:id="@+id/edtWeight"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/errObservationTxt"
+        android:layout_below="@+id/txtErrObservation"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -155,14 +155,54 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Peso invalido"
-        android:layout_below="@+id/weightEdt"
+        android:layout_below="@+id/edtWeight"
         android:textColor="#FF0000"
         android:visibility="gone" />
+    <EditText
+        android:id="@+id/edtPhotos"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/errWeightEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:inputType="textMultiLine"
+        android:layout_centerHorizontal="true"
+        android:hint="Fotos" />
+    <RadioGroup
+        android:id="@+id/radioGroupGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/edtPhotos"
+        android:layout_marginTop="17dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Macho"
+                />
+
+            <RadioButton
+                android:id="@+id/radioButtonFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hembra"
+                />
+        </LinearLayout>
+    </RadioGroup>
     <Button
         android:id="@+id/registerButton"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/errWeightEdt"
+        android:layout_below="@+id/radioGroupGender"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
