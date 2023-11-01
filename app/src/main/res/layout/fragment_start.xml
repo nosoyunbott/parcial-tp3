@@ -41,7 +41,7 @@
         android:paddingStart="12dp" />
 
     <EditText
-        android:id="@+id/edtImages"
+        android:id="@+id/edtImage"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_below="@+id/edtPhone"
@@ -53,14 +53,14 @@
         android:paddingStart="12dp" />
 
     <Button
-        android:id="@+id/btnPublish"
+        android:id="@+id/btnLogin"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edtImages"
+        android:layout_below="@+id/edtImage"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="16dp"
-        android:text="REGISTRATE" />
+        android:text="INICIAR SESIÓN" />
 
 </RelativeLayout>
