@@ -3,28 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="">
-        <menu>
+    <group>
+        <item
+            android:id="@+id/profileFragment"
+            android:icon="@drawable/profile"
+            android:title="Perfil" />
 
+        <item
+            android:id="@+id/settingsFragment"
+            android:icon="@drawable/settings"
+            android:title="Settings" />
+    </group>
 
+<!--    <item android:title="Opciones">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/profileFragment"-->
+<!--                android:icon="@drawable/profile"-->
+<!--                android:title="Perfil" />-->
 
-        </menu>
+<!--            <item-->
+<!--                android:id="@+id/settingsFragment"-->
+<!--                android:icon="@drawable/settings"-->
+<!--                android:title="Settings" />-->
+<!--        </menu>-->
 
-    </item>
-
-    <item android:title="">
-        <menu>
-            <item
-                android:id="@+id/profileFragment"
-                android:title="Perfil"
-                android:icon="@drawable/profile" />
-
-            <item
-                android:id="@+id/settingsFragment"
-                android:title="Settings"
-                android:icon="@drawable/settings"/>
-        </menu>
-
-    </item>
+<!--    </item>-->
 
 </menu>
