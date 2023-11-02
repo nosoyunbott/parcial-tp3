@@ -168,6 +168,9 @@ class PublishFragment : Fragment() {
             if(selectedSubBreed!=""){
                 val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed)
                 Log.d("imagesssss", images.toString())
+            }else{
+                val images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
+                Log.d("Images By Breed", images.toString())
             }
         }
     }
