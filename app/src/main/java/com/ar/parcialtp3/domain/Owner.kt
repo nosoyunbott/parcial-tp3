@@ -1,7 +1,9 @@
 package com.ar.parcialtp3.domain
 
-class Owner (
+class Owner(
     val name: String,
     val phone: Int,
     val image: String
-)
+) {
+    constructor() : this("", 0, "")
+}

@@ -8,4 +8,6 @@ class PublicationEntity (
     val owner: Owner,
     val location: String,
     val description: String
-)
+){
+    constructor() : this(Dog(), Owner(), "", "")
+}
