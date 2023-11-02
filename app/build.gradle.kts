@@ -67,4 +67,7 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
+    //GLIDE
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
 }
