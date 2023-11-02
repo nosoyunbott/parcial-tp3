@@ -56,12 +56,19 @@ class PublishFragment : Fragment() {
     lateinit var provincesAdapter: ArrayAdapter<String>
     var provincesList: List<String> = Provinces().getList()
 
+    lateinit var spnBreeds: Spinner
+    lateinit var breedsAdapter: ArrayAdapter<String>
+
+
     //Misc
     lateinit var selectedProvince: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+
         provincesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provincesList)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,31 +88,34 @@ class PublishFragment : Fragment() {
         btnPubish = v.findViewById(R.id.btnPublish)
         btnAddPhoto = v.findViewById(R.id.btnAddPhoto)
 
-        //TextView initialization
 
         //Spinners initialization
-        spnProvinces = v.findViewById(R.id.spnLocation)
 
+
+
+        spnProvinces = v.findViewById(R.id.spnLocation)
+        spnBreeds = v.findViewById(R.id.spnBreed)
+        lifecycleScope.launch {
+            //val hola = DogDataService().getImagesByBreed("hound")
+            val allBreeds = DogDataService().getAllBreeds()
+            for(b in allBreeds){
+//                Log.d("name", b.name)
+//                Log.d("subBreads", b.subBreeds.toString())
+
+            }
+            var breedsList = allBreeds.map { it.name }
+            //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
+            // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
+            breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
+            setUpSpinner(spnBreeds, breedsAdapter)
+        }
         setUpSpinner(spnProvinces, provincesAdapter)
+
         return v
     }
 
     override fun onStart() {
         super.onStart()
-
-        lifecycleScope.launch {
-            //val hola = DogDataService().getImagesByBreed("hound")
-            val allBreeds = DogDataService().getAllBreeds()
-            Log.d("allbreads", allBreeds.toString())
-            //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
-           // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
-
-        }
-
-
-
-
-
 
 
 

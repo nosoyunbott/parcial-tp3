@@ -57,7 +57,7 @@
         android:textColor="#FF0000"
         android:visibility="gone" />
     <Spinner
-        android:id="@+id/spnRace"
+        android:id="@+id/spnBreed"
         android:layout_width="300dp"
         android:layout_below="@+id/errNameEdt"
         android:layout_height="45dp"
@@ -69,9 +69,9 @@
         android:layout_marginEnd="16dp" />
 
     <Spinner
-        android:id="@+id/spnSubRace"
+        android:id="@+id/spnSubBreed"
         android:layout_width="300dp"
-        android:layout_below="@+id/spnRace"
+        android:layout_below="@+id/spnBreed"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
@@ -84,7 +84,7 @@
     <Spinner
         android:id="@+id/spnLocation"
         android:layout_width="300dp"
-        android:layout_below="@+id/spnSubRace"
+        android:layout_below="@+id/spnSubBreed"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
