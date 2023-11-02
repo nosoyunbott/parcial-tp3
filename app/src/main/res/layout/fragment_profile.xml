@@ -5,7 +5,8 @@
     android:id="@+id/layoutProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".fragments.ProfileFragment"
+    android:paddingTop="50dp">
 
     <TextView
         android:id="@+id/txtProfileTitle"
@@ -29,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtProfileTitle">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imgProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_launcher_foreground"
@@ -51,13 +52,24 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnProfileSubmit"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:text="Subir foto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtProfileSubmitImage" />
+
+    <EditText
+        android:id="@+id/edtProfileSubmitImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="URL de Imagen"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtProfileName" />
 
