@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/publishFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.ar.parcialtp3.fragments.HomeFragment"
