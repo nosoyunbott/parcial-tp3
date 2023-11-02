@@ -152,12 +152,22 @@ class PublishFragment : Fragment() {
                     spnSubBreeds -> selectedSubBreed = subBreedsList[position]
                 }
                 getSubBreedsOf(selectedBreed)
+                getImages(selectedBreed, selectedSubBreed)
                 Log.d("subred", selectedSubBreed)
 
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 //showDialog()
+            }
+        }
+    }
+
+    private fun getImages(selectedBreed: String, selectedSubBreed: String) {
+        lifecycleScope.launch {
+            if(selectedSubBreed!=""){
+                val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed)
+                Log.d("imagesssss", images.toString())
             }
         }
     }
