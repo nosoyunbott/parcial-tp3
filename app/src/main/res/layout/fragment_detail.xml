@@ -23,11 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginBottom="326dp"
+        android:layout_marginTop="24dp"
         android:text="Nombre"
         android:textSize="26dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgCarrousel" />
 
@@ -87,14 +85,12 @@
         android:id="@+id/imageView4"
         android:layout_width="74dp"
         android:layout_height="77dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="210dp"
-        android:src="@drawable/rounded_shape"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        android:src="@drawable/rounded_shape"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <TextView
         android:id="@+id/txtDetailWeight"
@@ -121,14 +117,12 @@
         android:id="@+id/imageView5"
         android:layout_width="74dp"
         android:layout_height="77dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="210dp"
-        android:src="@drawable/rounded_shape"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        android:src="@drawable/rounded_shape"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline8"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -190,7 +184,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/imgDetailOwner"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_launcher_foreground"
