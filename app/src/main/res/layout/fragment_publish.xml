@@ -117,31 +117,10 @@
         android:visibility="gone" />
 
     <EditText
-        android:id="@+id/edtObservation"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/txtErrDescription"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Observacion" />
-
-    <TextView
-        android:id="@+id/txtErrObservation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Mail invalido"
-        android:layout_below="@+id/edtObservation"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
-    <EditText
         android:id="@+id/edtWeight"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/txtErrObservation"
+        android:layout_below="@+id/txtErrDescription"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"

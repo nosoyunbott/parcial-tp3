@@ -7,7 +7,8 @@ class Dog (
     val breed: String,
     val subBreed: String?,
     val images: ArrayList<String>,
-    val isAdopted: Boolean
+    val isAdopted: Boolean,
+    val weight: Int
 )
 
 

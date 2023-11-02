@@ -2,6 +2,7 @@ package com.ar.parcialtp3.fragments
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,19 +19,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.ar.parcialtp3.R
+import com.ar.parcialtp3.domain.Dog
+import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
+import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
+import com.ar.parcialtp3.services.firebase.SavePublicationService
 import kotlinx.coroutines.launch
 
 class PublishFragment : Fragment() {
 
     lateinit var v: View
 
+    val MALE = "MALE"
+    val FEMALE = "FEMALE"
     //Edit Text
     lateinit var edtAge: EditText
     lateinit var edtName: EditText
     lateinit var edtDescription: EditText
-    lateinit var edtObservation: EditText
     lateinit var edtWeight: EditText
     lateinit var edtPhotos: EditText
     lateinit var radioButtonMale: RadioButton
@@ -59,6 +65,9 @@ class PublishFragment : Fragment() {
     lateinit var selectedProvince: String
     lateinit var selectedBreed: String
     lateinit var selectedSubBreed: String
+    lateinit var selectedSex: String
+    lateinit var sharedPreferences: SharedPreferences
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -76,7 +85,6 @@ class PublishFragment : Fragment() {
         edtAge = v.findViewById(R.id.edtAge)
         edtName = v.findViewById(R.id.edtName)
         edtDescription = v.findViewById(R.id.edtDescription)
-        edtObservation = v.findViewById(R.id.edtObservation)
         edtWeight = v.findViewById(R.id.edtWeight)
         edtPhotos = v.findViewById(R.id.edtPhotos)
         radioButtonMale = v.findViewById(R.id.radioButtonMale)
@@ -87,6 +95,8 @@ class PublishFragment : Fragment() {
 
         //Spinners initialization
 
+        sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
 
         spnProvinces = v.findViewById(R.id.spnLocation)
@@ -115,6 +125,7 @@ class PublishFragment : Fragment() {
 
 
 
+        handleRadioButtons()
         photosList = mutableListOf()
         btnAddPhoto.setOnClickListener{
             if(photosList.size < 5){
@@ -131,9 +142,30 @@ class PublishFragment : Fragment() {
         }
 
         btnPubish.setOnClickListener{
+            val temporaryImageArray = arrayListOf("https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
+                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
+                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg")
+            val dog = Dog(edtName.text.toString(), edtAge.text.toString().toInt(), selectedSex, selectedBreed, selectedSubBreed, temporaryImageArray, false, edtWeight.text.toString().toInt())
+            val ownerName = sharedPreferences.getString("username", "")
+            val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
+            val ownerImage = sharedPreferences.getString("image", "")
+            val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
+            val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
+            SavePublicationService().savePublication(publication)
 
         }
 
+    }
+
+    private fun handleRadioButtons() {
+        radioButtonFemale.setOnClickListener {
+            selectedSex = FEMALE
+            radioButtonMale.isChecked = false
+        }
+        radioButtonMale.setOnClickListener {
+            selectedSex = MALE
+            radioButtonFemale.isChecked = false
+        }
     }
 
     private fun setUpSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
