@@ -8,31 +8,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
+import com.ar.parcialtp3.adapters.CardAdapter
+import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
+import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.ar.parcialtp3.services.firebase.SavePublicationService
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
 
-    val savePublicationsService = SavePublicationService()
-
     val getPublicationsService = GetPublicationsService()
 
-    var publicationList: MutableList<PublicationEntity> = ArrayList()
     lateinit var filterContainer: LinearLayout
+
+    lateinit var recCardList: RecyclerView
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    var cardList: MutableList<Card> = ArrayList()
+    private lateinit var cardListAdapter: CardAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home, container, false)
+
+        recCardList = v.findViewById(R.id.cardRecyclerView)
+        filterContainer = v.findViewById(R.id.filterContainer)
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
@@ -42,11 +51,41 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        recCardList.setHasFixedSize(true)
+        linearLayoutManager = LinearLayoutManager(context)
+        recCardList.layoutManager = linearLayoutManager
+        cardListAdapter = CardAdapter(cardList, this)
+        recCardList.adapter = cardListAdapter
 
+        refreshRecyclerView()
+
+        getPublicationsService.getPublications(false) { documents, exception ->
+            if (exception == null) {
+                if (documents != null) {
+                    for (d in documents) {
+                        val publication = d.toObject(PublicationEntity::class.java)
+                        if (publication != null) {
+                            val dog = Card(
+                                publication.dog.name,
+                                publication.dog.breed,
+                                publication.dog.subBreed,
+                                publication.dog.age,
+                                publication.dog.sex
+                            )
+                            cardList.add(dog)
+                            Log.d("asd",cardList.toString())
+                        }
+                    }
+                }
+            } else {
+                Log.d("asd", "No hay publications")
+            }
+            cardListAdapter.notifyDataSetChanged()
+        }
     }
 
-    fun refreshRecyclerView() {
-        val razas = listOf("Golden", "Caniche", "Pastor")
+    private fun refreshRecyclerView() {
+        val razas = listOf("Golden", "Caniche", "Salchicha")
         for (filterName in razas) {
             val btnFilter = Button(context)
             btnFilter.text = filterName
@@ -62,12 +101,16 @@ class HomeFragment : Fragment() {
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
                 val filteredList =
-                    publicationList.filter { it.dog.breed == filter } as MutableList
-                //requestListAdapter = RequestCardAdapter(filteredList, this@RequestsListFragment)
-                //recRequestList.adapter = requestListAdapter
+                    cardList.filter { it.breed == filter } as MutableList
+                cardListAdapter = CardAdapter(filteredList, this@HomeFragment)
+                recCardList.adapter = cardListAdapter
             }
 
             filterContainer.addView(btnFilter)
         }
+    }
+
+    override fun onViewItemDetail(card: Card) {
+        TODO("Not yet implemented")
     }
 }
