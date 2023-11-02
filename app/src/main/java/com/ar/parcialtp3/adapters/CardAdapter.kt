@@ -24,7 +24,7 @@ class CardAdapter(private val cardList: MutableList<Card>, private val onItemCli
         val card = cardList[position]
         holder.setName(card.name)
         holder.setBreed(card.breed)
-        holder.setSubBreed(card.breed)
+        holder.setSubBreed(card.subBreed)
         holder.setAge(card.age)
         holder.setSex(card.sex)
 //        holder.setImage(card.image)
