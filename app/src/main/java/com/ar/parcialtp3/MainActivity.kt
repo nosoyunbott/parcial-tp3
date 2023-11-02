@@ -22,6 +22,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     //Shared
     lateinit var sharedPreferences: SharedPreferences
+
+    //Bottom nav
+    lateinit var bottomNavigation: BottomNavigationView
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +95,34 @@ class MainActivity : AppCompatActivity() {
 
             drawer.closeDrawer(GravityCompat.START)
             true
+        }
+
+        //Bottom nav
+
+        bottomNavigation = findViewById(R.id.bottom_nav_view)
+
+        NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
+
+        bottomNavigation.setOnItemSelectedListener {item ->
+            when(item.itemId){
+                R.id.homeFragment ->{
+                    navHostFragment.navController.navigate(R.id.homeFragment)
+                    true
+                }
+                R.id.favouritesFragment -> {
+                    navHostFragment.navController.navigate(R.id.favouritesFragment)
+                    true
+                }
+                R.id.adoptionFragment -> {
+                    navHostFragment.navController.navigate(R.id.adoptionFragment)
+                    true
+                }
+                R.id.publishFragment -> {
+                    navHostFragment.navController.navigate(R.id.publishFragment)
+                    true
+                }
+                else -> false
+            }
         }
 
     }
