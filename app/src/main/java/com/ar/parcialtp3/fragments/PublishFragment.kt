@@ -94,10 +94,11 @@ class PublishFragment : Fragment() {
         super.onStart()
 
         lifecycleScope.launch {
-//            val hola = DogDataService().getImagesByBreed("hound")
-//            val allBreeds = DogDataService().getAllBreeds()
-            val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
-            Log.d("imagesBySubBreed", imagesBySubBreed.toString())
+            //val hola = DogDataService().getImagesByBreed("hound")
+            val allBreeds = DogDataService().getAllBreeds()
+            Log.d("allbreads", allBreeds.toString())
+            //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
+           // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
 
         }
 
