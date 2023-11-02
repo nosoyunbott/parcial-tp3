@@ -23,13 +23,6 @@ import com.ar.parcialtp3.entities.Provinces
 import com.ar.parcialtp3.services.ActivityServiceApiBuilder
 import com.ar.parcialtp3.services.DogDataService
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
 
 class PublishFragment : Fragment() {
 
