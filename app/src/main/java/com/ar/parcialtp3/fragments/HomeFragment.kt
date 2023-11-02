@@ -17,13 +17,16 @@ class HomeFragment : Fragment() {
     var publishList: MutableList<Publish> = ArrayList()
     lateinit var filterContainer: LinearLayout
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_home, container, false)
+
+        activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
+        activity?.actionBar?.setHomeButtonEnabled(true)
+
         return v
     }
 
