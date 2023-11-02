@@ -39,10 +39,10 @@ class CardHolder(v: View) : RecyclerView.ViewHolder(v) {
         txt.text = sex
     }
 
-    fun setImage(image: String ) {
-        val txt : TextView = view.findViewById(R.id.card_image)
-        txt.text = image
-    }
+//    fun setImage(image: String ) {
+//        val txt : TextView = view.findViewById(R.id.card_image)
+//        txt.text = image
+//    }
 
     fun getCardLayout (): CardView {
         return view.findViewById(R.id.card)

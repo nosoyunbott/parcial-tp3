@@ -3,14 +3,14 @@ package com.ar.parcialtp3.entities
 import android.os.Parcel
 import android.os.Parcelable
 
-class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, image: String?): Parcelable {
+class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?): Parcelable {
 
     var name: String = ""
     var breed: String = ""
     var subBreed: String = ""
     var age: Int = 0
     var sex: String = ""
-    var image: String = ""
+//    var image: String = ""
 
 
     constructor(parcel: Parcel) : this(
@@ -19,7 +19,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
-        parcel.readString()
+//        parcel.readString()
     )
 
     init {
