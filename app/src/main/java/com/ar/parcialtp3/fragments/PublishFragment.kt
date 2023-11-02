@@ -67,7 +67,7 @@ class PublishFragment : Fragment() {
     //Misc
     lateinit var selectedProvince: String
     lateinit var selectedBreed: String
-   // lateinit var selectedSubBreed: String
+    lateinit var selectedSubBreed: String
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -147,11 +147,12 @@ class PublishFragment : Fragment() {
 
     private fun setUpSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
-        var selectedSubBreed = ""
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
+                selectedSubBreed = ""
                 when (spinner) {
                     spnProvinces -> selectedProvince = provincesList[position]
                     spnBreeds -> selectedBreed = breedsList[position]
