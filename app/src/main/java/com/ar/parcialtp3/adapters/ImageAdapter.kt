@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.Image
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,8 @@ class ImageAdapter(private val imageList: ArrayList<String>, private val viewPag
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.image_container, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.image_container, parent, false)
         return ImageViewHolder(view)
     }
 
@@ -32,35 +34,18 @@ class ImageAdapter(private val imageList: ArrayList<String>, private val viewPag
         return imageList.size
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(
+        holder: ImageViewHolder,
+        position: Int
+    ) {
         // Load image from URL using Glide
         Glide.with(holder.itemView.context)
-            .asBitmap()
             .load(imageList[position])
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    // Add the loaded Bitmap to the imageList
-                    // Note: You might want to resize the bitmap if it's too large
-                    val resizedBitmap = resizeBitmap(resource, targetImageWidth, targetImageHeight)
-                    holder.imageView.setImageBitmap(resizedBitmap)
-                    if (position == imageList.size - 1) {
-                        viewPager2.post(runnable)
-                    }
-                }
+            .into(holder.imageView)
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    // Do nothing here
-                }
-            })
-    }
-
-    // Define the target image width and height you desire
-    private val targetImageWidth = 500
-    private val targetImageHeight = 500
-
-    // Resize the Bitmap to the specified width and height
-    private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        return Bitmap.createScaledBitmap(bitmap, width, height, true)
+        if (position == imageList.size - 1) {
+            viewPager2.post(runnable)
+        }
     }
 
     private val runnable = Runnable {

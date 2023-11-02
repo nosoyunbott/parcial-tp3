@@ -48,7 +48,7 @@ class DetailFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 handler.removeCallbacks(runnable)
-                handler.postDelayed(runnable, 2000)
+                handler.postDelayed(runnable, 10000)
             }
         })
         return v
@@ -92,23 +92,22 @@ class DetailFragment : Fragment() {
                 if (document != null) {
                     val publication = document.toObject(PublicationEntity::class.java)
                     if (publication != null) {
-//                        Log.d("asd", publication.dog.images.toString())
+                        imageList.clear()
                         for (i in 0 until publication.dog.images.size) {
                             imageList.add(publication.dog.images[i])
                         }
 
+                        adapter = ImageAdapter(imageList, viewPager2)
+                        viewPager2.adapter = adapter
+                        viewPager2.offscreenPageLimit = 3
+                        viewPager2.clipToPadding = false
+                        viewPager2.clipChildren = false
+                        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
                     }
                 }
             } else {
                 Log.d("asd", "No hay publications")
             }
         }
-
-        adapter = ImageAdapter(imageList, viewPager2)
-        viewPager2.adapter = adapter
-        viewPager2.offscreenPageLimit = 3
-        viewPager2.clipToPadding = false
-        viewPager2.clipChildren = false
-        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
 }
