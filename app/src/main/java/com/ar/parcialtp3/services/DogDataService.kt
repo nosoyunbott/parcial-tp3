@@ -65,8 +65,8 @@ class DogDataService {
                         }
 
                         val b = Breed(breedName, subBreeds)
-                        Log.d("breedName", breedName.toString())
-                        Log.d("subBreeds", subBreeds.toString())
+//                        Log.d("breedName", breedName.toString())
+//                        Log.d("subBreeds", subBreeds.toString())
                         breeds.add(b)
                     }
                 }

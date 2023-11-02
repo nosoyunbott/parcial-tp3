@@ -51,11 +51,16 @@ class PublishFragment : Fragment() {
 
     lateinit var spnBreeds: Spinner
     lateinit var breedsAdapter: ArrayAdapter<String>
+    lateinit var breedsList: List<String>
 
+    lateinit var spnSubBreeds: Spinner
+    lateinit var subBreedsAdapter: ArrayAdapter<String>
+    var subBreedsList: MutableList<String> = mutableListOf()
 
     //Misc
     lateinit var selectedProvince: String
-
+    lateinit var selectedBreed: String
+    lateinit var selectedSubBreed: String
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -88,21 +93,21 @@ class PublishFragment : Fragment() {
 
         spnProvinces = v.findViewById(R.id.spnLocation)
         spnBreeds = v.findViewById(R.id.spnBreed)
+        spnSubBreeds = v.findViewById(R.id.spnSubBreed)
         lifecycleScope.launch {
             //val hola = DogDataService().getImagesByBreed("hound")
             val allBreeds = DogDataService().getAllBreeds()
-            for(b in allBreeds){
-//                Log.d("name", b.name)
-//                Log.d("subBreads", b.subBreeds.toString())
 
-            }
-            var breedsList = allBreeds.map { it.name.uppercase() }
+            breedsList = allBreeds.map { it.name.uppercase() }
             //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
             // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
             breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
             setUpSpinner(spnBreeds, breedsAdapter)
+            setUpSpinner(spnProvinces, provincesAdapter)
+            subBreedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, subBreedsList)
+            setUpSpinner(spnSubBreeds, subBreedsAdapter)
         }
-        setUpSpinner(spnProvinces, provincesAdapter)
+
 
         return v
     }
@@ -135,20 +140,59 @@ class PublishFragment : Fragment() {
 
     private fun setUpSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
+                selectedSubBreed = ""
                 when (spinner) {
                     spnProvinces -> selectedProvince = provincesList[position]
+                    spnBreeds -> selectedBreed = breedsList[position]
+                    spnSubBreeds -> selectedSubBreed = subBreedsList[position]
                 }
+                getSubBreedsOf(selectedBreed)
+                getImages(selectedBreed, selectedSubBreed)
+                Log.d("subred", selectedSubBreed)
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog()
+                //showDialog()
             }
         }
     }
+
+    private fun getImages(selectedBreed: String, selectedSubBreed: String) {
+        lifecycleScope.launch {
+            if(selectedSubBreed!=""){
+                val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed)
+                Log.d("imagesssss", images.toString())
+            }else{
+                val images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
+                Log.d("Images By Breed", images.toString())
+            }
+        }
+    }
+
+    private fun getSubBreedsOf(selectedBreed: String) {
+        lifecycleScope.launch {
+            val allBreds = DogDataService().getAllBreeds()
+            val breed = allBreds.find {it.name.uppercase() == selectedBreed}
+            val subBreeds = breed?.subBreeds
+
+            subBreedsList.clear()
+
+            if(subBreeds?.find { it != "[]" } != null){
+                subBreedsList.addAll(subBreeds!!)
+
+            }
+            subBreedsAdapter.notifyDataSetChanged()
+            Log.d("array", breed?.subBreeds.toString())
+        }
+
+    }
+
     private fun showDialog() {
         val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ERROR SPINNER")
             .setCancelable(true).create()
