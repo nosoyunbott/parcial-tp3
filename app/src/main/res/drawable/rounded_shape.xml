@@ -1,0 +1,8 @@
+<!-- res/drawable/text_frame.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@null"></solid>
+    <corners android:radius="8dp" />
+    <stroke
+        android:width="2dp"
+        android:color="#D9D9D9" />
+</shape>
