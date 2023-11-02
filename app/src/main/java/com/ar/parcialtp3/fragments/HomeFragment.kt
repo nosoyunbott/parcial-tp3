@@ -1,14 +1,17 @@
 package com.ar.parcialtp3.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.entities.Publish
+import com.ar.parcialtp3.services.firebase.GetPublicationsService
 
 class HomeFragment : Fragment() {
 
@@ -28,6 +31,25 @@ class HomeFragment : Fragment() {
         activity?.actionBar?.setHomeButtonEnabled(true)
 
         return v
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // EJEMPLO LLAMADO A LA BASE POR EL SERVICE
+        //----------------------------------------------------------------------------------
+        GetPublicationsService().getPublications(false) { documents, exception ->
+            if (exception == null) {
+                if (documents != null) {
+                    for(d in documents){
+                        Log.d("asd", d.getString("name").toString())
+                        Log.d("asd", d.getBoolean("isAdopted").toString())
+                    }
+                }
+            } else {
+                Log.d("asd", "No hay publications")
+            }
+        }
     }
 
     fun refreshRecyclerView() {

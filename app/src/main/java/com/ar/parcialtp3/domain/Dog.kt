@@ -8,7 +8,7 @@ class Dog (
     val owner: Owner,
     val breed: String,
     val subBreed: String?,
-    val images: MutableList<String>,
+    val images: ArrayList<String>,
     val isAdopted: Boolean
 )
 
