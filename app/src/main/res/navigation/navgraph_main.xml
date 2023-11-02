@@ -34,4 +34,9 @@
         android:name="com.ar.parcialtp3.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/adoptionFragment"
+        android:name="com.ar.parcialtp3.fragments.AdoptionFragment"
+        android:label="fragment_adoption"
+        tools:layout="@layout/fragment_adoption" />
 </navigation>
