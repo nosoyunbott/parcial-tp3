@@ -9,7 +9,7 @@
     android:background="@null"
     tools:context=".fragments.DetailFragment">
 
-    <ImageView
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/imgCarrousel"
         android:layout_width="match_parent"
         android:layout_height="300dp"
