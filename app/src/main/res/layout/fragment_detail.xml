@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DetailFragment">
 
+<<<<<<< HEAD
+=======
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/imgCarrousel"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+>>>>>>> d48bbefd4d75217bf9cd0dbe51d12ed52d3407c1
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
