@@ -1,4 +1,4 @@
-package com.ar.parcialtp3.entities
+package com.ar.parcialtp3.domain
 
 class Provinces {
         val provincesList = listOf(

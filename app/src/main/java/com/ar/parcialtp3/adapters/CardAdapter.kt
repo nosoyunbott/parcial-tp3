@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
-import com.ar.parcialtp3.entities.Card
+import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.holders.CardHolder
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 

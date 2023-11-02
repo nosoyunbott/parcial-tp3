@@ -18,9 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.ar.parcialtp3.R
-import com.ar.parcialtp3.entities.DogImages
-import com.ar.parcialtp3.entities.Provinces
-import com.ar.parcialtp3.services.ActivityServiceApiBuilder
+import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.services.DogDataService
 import kotlinx.coroutines.launch
 

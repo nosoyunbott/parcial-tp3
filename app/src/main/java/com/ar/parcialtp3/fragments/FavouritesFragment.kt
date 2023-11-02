@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.CardAdapter
-import com.ar.parcialtp3.entities.Card
+import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 
 class FavouritesFragment : Fragment(), OnViewItemClickedListener {

@@ -1,16 +1,11 @@
 package com.ar.parcialtp3.services
 
-import android.util.Log
-import com.ar.parcialtp3.entities.Breed
+import com.ar.parcialtp3.domain.Breed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DogDataService {
     suspend fun getImagesByBreed(breed: String): List<String> {

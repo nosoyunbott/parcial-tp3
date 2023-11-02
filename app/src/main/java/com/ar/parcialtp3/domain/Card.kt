@@ -1,4 +1,4 @@
-package com.ar.parcialtp3.entities
+package com.ar.parcialtp3.domain
 
 import android.os.Parcel
 import android.os.Parcelable
