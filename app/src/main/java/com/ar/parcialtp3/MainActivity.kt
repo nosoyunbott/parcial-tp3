@@ -127,6 +127,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun refreshNavView() {
+        drawer.refreshDrawableState()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, drawer)
         // enabling action bar app icon and behaving it as a toggle button

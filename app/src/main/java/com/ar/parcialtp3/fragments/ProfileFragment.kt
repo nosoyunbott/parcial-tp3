@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.ar.parcialtp3.MainActivity
 import com.ar.parcialtp3.R
 import com.bumptech.glide.Glide
 
@@ -35,6 +36,7 @@ class ProfileFragment : Fragment() {
         txtProfileName = v.findViewById(R.id.txtProfileName)
         btnProfileSubmit = v.findViewById(R.id.btnProfileSubmit)
         edtSubmitImage = v.findViewById(R.id.edtProfileSubmitImage)
+
         return v
     }
 
@@ -60,8 +62,17 @@ class ProfileFragment : Fragment() {
                 editor.apply()
                 val imageUrl = sharedPreferences.getString("image", "")
                 Glide.with(this).load(imageUrl).into(imgProfile)
+
+                //Update header
+
+                val parentActivity: MainActivity? = activity as? MainActivity
+                if (parentActivity != null) {
+                    Glide.with(this).load(imageUrl).into(parentActivity.imgHeader)
+                }
             }
         }
+
+
 
     }
 
