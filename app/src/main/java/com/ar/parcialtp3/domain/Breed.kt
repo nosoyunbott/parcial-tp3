@@ -1,4 +1,4 @@
-package com.ar.parcialtp3.entities
+package com.ar.parcialtp3.domain
 
 class Breed(name: String?, subBreeds: MutableList<String>) {
     var name: String = ""
