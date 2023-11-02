@@ -16,4 +16,10 @@ class SavePublicationService {
 
         return newDocument.set(publication)
     }
+
+    //val listImages = arrayListOf("https://images.dog.ceo/breeds/setter-irish/n02100877_123.jpg")
+    //val dog = Dog("BoyOlmi",15,"Macho", "Caniche", "Mini", listImages, false)
+    //val owner = Owner("Tom", 1156943023, "https://images.dog.ceo/breeds/hound-afghan/n02088094_8063.jpg")
+    //val publication = PublicationEntity(dog, owner, Provinces().getList()[5],"Perrito lindo encontrado en la ruta")
+    //savePublicationsService.savePublication(publication)
 }
