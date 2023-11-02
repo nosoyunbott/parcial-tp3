@@ -43,28 +43,6 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        // EJEMPLO LLAMADO A LA BASE POR EL SERVICE
-        //----------------------------------------------------------------------------------
-        getPublicationsService.getPublications(false) { documents, exception ->
-            if (exception == null) {
-                if (documents != null) {
-                    for(d in documents){
-                        Log.d("asd", d.getString("name").toString())
-                        Log.d("asd", d.getBoolean("isAdopted").toString())
-                        Log.d("id", d.id)
-                    }
-                }
-            } else {
-                Log.d("asd", "No hay publications")
-            }
-        }
-        //val listImages = arrayListOf("https://images.dog.ceo/breeds/setter-irish/n02100877_123.jpg")
-        //val dog = Dog("BoyOlmi",15,"Macho", "Caniche", "Mini", listImages, false)
-        //val owner = Owner("Tom", 1156943023, "https://images.dog.ceo/breeds/hound-afghan/n02088094_8063.jpg")
-        //val publication = PublicationEntity(dog, owner, Provinces().getList()[5],"Perrito lindo encontrado en la ruta")
-        //savePublicationsService.savePublication(publication)
-
-
     }
 
     fun refreshRecyclerView() {
