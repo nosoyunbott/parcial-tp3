@@ -3,25 +3,33 @@ package com.ar.parcialtp3.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ar.parcialtp3.R
+import com.ar.parcialtp3.entities.Card
+import com.ar.parcialtp3.holders.CardHolder
+import com.ar.parcialtp3.listener.OnViewItemClickedListener
 
-class CardAdapter(private val requestList: MutableList<Card>,  private val onItemClick: OnViewItemClickedListener) :
+class CardAdapter(private val cardList: MutableList<Card>, private val onItemClick: OnViewItemClickedListener) :
 
-    RecyclerView.Adapter<RequestCardHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestCardHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.request_card_element, parent, false)
-        return (RequestCardHolder(view))
+    RecyclerView.Adapter<CardHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.card_recycler, parent, false)
+        return (CardHolder(view))
     }
 
     override fun getItemCount(): Int {
-        return requestList.size
+        return cardList.size
     }
 
-    override fun onBindViewHolder(holder: RequestCardHolder, position: Int) {
-        val request = requestList[position]
-        holder.setTitle(request.requestTitle)
-        holder.setBidsAmount(request.requestBidAmount)
+    override fun onBindViewHolder(holder: CardHolder, position: Int) {
+        val card = cardList[position]
+        holder.setName(card.name)
+        holder.setBreed(card.breed)
+        holder.setSubBreed(card.breed)
+        holder.setAge(card.age)
+        holder.setSex(card.sex)
+        holder.setImage(card.image)
         holder.getCardLayout().setOnClickListener{
-            onItemClick.onViewItemDetail(request)
+            onItemClick.onViewItemDetail(card)
         }
 
     }
