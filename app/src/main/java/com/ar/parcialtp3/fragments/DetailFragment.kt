@@ -16,6 +16,8 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.ImageAdapter
+import com.ar.parcialtp3.entities.PublicationEntity
+import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,8 +28,9 @@ class DetailFragment : Fragment() {
     private lateinit var v: View
     private lateinit var viewPager2: ViewPager2
     private lateinit var handler: Handler
-    private lateinit var imageList: ArrayList<Int>
+    private lateinit var imageList: ArrayList<String>
     private lateinit var adapter: ImageAdapter
+    private val getPublicationsService = GetPublicationsService()
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -84,29 +87,22 @@ class DetailFragment : Fragment() {
 
         val documentId = "KPuDeYxakHBkM91fjQ7D"
 
-        db.collection("Publications").document(documentId).collection("dog")
-            .get()
-            .addOnCompleteListener { querySnapshot ->
-                if (querySnapshot.isSuccessful) {
-                    for (document in querySnapshot.result!!) {
-                        // Access the array of images inside the 'dogs' collection
-                        val imagesArray = document.getString("images") as? ArrayList<String>
-                        if (imagesArray != null) {
-                            // Iterate through the imagesArray and do something with the images
-                            for (i in 0 until imagesArray.size) {
-                                imageList.add(imagesArray[i].toInt())
-                                Log.d("Image URL", imagesArray[i])
-                            }
-                        } else {
-                            // Handle the case where 'images' field is not present or not an ArrayList<String>
-                            Log.e("Error", "Images field not found or not of the correct type")
+        getPublicationsService.getPublicationById(documentId) { document, exception ->
+            if (exception == null) {
+                if (document != null) {
+                    val publication = document.toObject(PublicationEntity::class.java)
+                    if (publication != null) {
+//                        Log.d("asd", publication.dog.images.toString())
+                        for (i in 0 until publication.dog.images.size) {
+                            imageList.add(publication.dog.images[i])
                         }
+
                     }
-                } else {
-                    // Handle errors
-                    Log.e("Error", "Error getting documents: ${querySnapshot.exception}")
                 }
+            } else {
+                Log.d("asd", "No hay publications")
             }
+        }
 
         adapter = ImageAdapter(imageList, viewPager2)
         viewPager2.adapter = adapter
