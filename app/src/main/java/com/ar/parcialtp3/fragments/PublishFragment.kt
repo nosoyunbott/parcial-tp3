@@ -58,11 +58,15 @@ class PublishFragment : Fragment() {
 
     lateinit var spnBreeds: Spinner
     lateinit var breedsAdapter: ArrayAdapter<String>
+    lateinit var breedsList: List<String>
 
+    lateinit var spnSubBreeds: Spinner
+    lateinit var subBreedsAdapter: ArrayAdapter<String>
+    lateinit var subBreedsList: List<String>
 
     //Misc
     lateinit var selectedProvince: String
-
+    lateinit var selectedBreed: String
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -95,21 +99,19 @@ class PublishFragment : Fragment() {
 
         spnProvinces = v.findViewById(R.id.spnLocation)
         spnBreeds = v.findViewById(R.id.spnBreed)
+        spnSubBreeds = v.findViewById(R.id.spnSubBreed)
         lifecycleScope.launch {
             //val hola = DogDataService().getImagesByBreed("hound")
             val allBreeds = DogDataService().getAllBreeds()
-            for(b in allBreeds){
-//                Log.d("name", b.name)
-//                Log.d("subBreads", b.subBreeds.toString())
 
-            }
-            var breedsList = allBreeds.map { it.name.uppercase() }
+            breedsList = allBreeds.map { it.name.uppercase() }
             //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
             // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
             breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
             setUpSpinner(spnBreeds, breedsAdapter)
+            setUpSpinner(spnProvinces, provincesAdapter)
         }
-        setUpSpinner(spnProvinces, provincesAdapter)
+
 
         return v
     }
@@ -148,7 +150,9 @@ class PublishFragment : Fragment() {
             ) {
                 when (spinner) {
                     spnProvinces -> selectedProvince = provincesList[position]
+                    spnBreeds -> selectedBreed = breedsList[position]
                 }
+                getSubBreedsOf(selectedBreed)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -156,6 +160,22 @@ class PublishFragment : Fragment() {
             }
         }
     }
+
+    private fun getSubBreedsOf(selectedBreed: String) {
+        lifecycleScope.launch {
+            val allBreds = DogDataService().getAllBreeds()
+            val breed = allBreds.find {it.name.uppercase() == selectedBreed}
+            val subBreeds = breed?.subBreeds
+            if(subBreeds?.find { it != "[]" } != null){
+                subBreedsList = subBreeds
+                subBreedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, subBreedsList)
+                setUpSpinner(spnSubBreeds, subBreedsAdapter)
+            }
+            Log.d("array", breed?.subBreeds.toString())
+        }
+
+    }
+
     private fun showDialog() {
         val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ERROR SPINNER")
             .setCancelable(true).create()
