@@ -103,7 +103,7 @@ class PublishFragment : Fragment() {
 //                Log.d("subBreads", b.subBreeds.toString())
 
             }
-            var breedsList = allBreeds.map { it.name }
+            var breedsList = allBreeds.map { it.name.uppercase() }
             //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
             // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
             breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
