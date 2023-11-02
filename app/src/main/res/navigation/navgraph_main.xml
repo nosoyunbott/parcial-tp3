@@ -39,4 +39,9 @@
         android:name="com.ar.parcialtp3.fragments.AdoptionFragment"
         android:label="fragment_adoption"
         tools:layout="@layout/fragment_adoption" />
+    <fragment
+        android:id="@+id/adoptionsListFragment"
+        android:name="com.ar.parcialtp3.fragments.AdoptionsListFragment"
+        android:label="fragment_adoptions_list"
+        tools:layout="@layout/fragment_adoptions_list" />
 </navigation>

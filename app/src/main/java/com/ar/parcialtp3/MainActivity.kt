@@ -113,8 +113,8 @@ class MainActivity : AppCompatActivity() {
                     navHostFragment.navController.navigate(R.id.favouritesFragment)
                     true
                 }
-                R.id.adoptionFragment -> {
-                    navHostFragment.navController.navigate(R.id.adoptionFragment)
+                R.id.adoptionsListFragment -> {
+                    navHostFragment.navController.navigate(R.id.adoptionsListFragment)
                     true
                 }
                 R.id.publishFragment -> {

@@ -17,7 +17,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/searchEditText"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -28,6 +28,8 @@
             android:padding="12dp"
             android:textColorHint="#7F7F7F"
             android:textSize="14sp" />
+
+
 
         <ImageView
             android:layout_width="48dp"

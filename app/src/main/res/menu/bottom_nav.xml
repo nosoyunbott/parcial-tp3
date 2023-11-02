@@ -9,7 +9,7 @@
         android:id="@+id/favouritesFragment"/>
     <item android:title="Adopcion"
         android:icon="@drawable/adoption_icon"
-        android:id="@+id/adoptionFragment"/>
+        android:id="@+id/adoptionsListFragment"/>
     <item android:title="Publicacion"
         android:icon="@drawable/publish_icon"
         android:id="@+id/publishFragment"/>
