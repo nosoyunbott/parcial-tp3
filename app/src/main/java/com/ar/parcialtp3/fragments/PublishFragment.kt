@@ -62,11 +62,12 @@ class PublishFragment : Fragment() {
 
     lateinit var spnSubBreeds: Spinner
     lateinit var subBreedsAdapter: ArrayAdapter<String>
-    lateinit var subBreedsList: List<String>
+    var subBreedsList: MutableList<String> = mutableListOf()
 
     //Misc
     lateinit var selectedProvince: String
     lateinit var selectedBreed: String
+   // lateinit var selectedSubBreed: String
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -110,6 +111,8 @@ class PublishFragment : Fragment() {
             breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
             setUpSpinner(spnBreeds, breedsAdapter)
             setUpSpinner(spnProvinces, provincesAdapter)
+            subBreedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, subBreedsList)
+            setUpSpinner(spnSubBreeds, subBreedsAdapter)
         }
 
 
@@ -144,6 +147,7 @@ class PublishFragment : Fragment() {
 
     private fun setUpSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
+        var selectedSubBreed = ""
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
@@ -151,12 +155,15 @@ class PublishFragment : Fragment() {
                 when (spinner) {
                     spnProvinces -> selectedProvince = provincesList[position]
                     spnBreeds -> selectedBreed = breedsList[position]
+                    spnSubBreeds -> selectedSubBreed = subBreedsList[position]
                 }
                 getSubBreedsOf(selectedBreed)
+                Log.d("subred", selectedSubBreed)
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog()
+                //showDialog()
             }
         }
     }
@@ -166,11 +173,14 @@ class PublishFragment : Fragment() {
             val allBreds = DogDataService().getAllBreeds()
             val breed = allBreds.find {it.name.uppercase() == selectedBreed}
             val subBreeds = breed?.subBreeds
+
+            subBreedsList.clear()
+
             if(subBreeds?.find { it != "[]" } != null){
-                subBreedsList = subBreeds
-                subBreedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, subBreedsList)
-                setUpSpinner(spnSubBreeds, subBreedsAdapter)
+                subBreedsList.addAll(subBreeds!!)
+
             }
+            subBreedsAdapter.notifyDataSetChanged()
             Log.d("array", breed?.subBreeds.toString())
         }
 
