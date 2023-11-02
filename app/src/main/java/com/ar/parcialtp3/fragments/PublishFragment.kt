@@ -94,8 +94,11 @@ class PublishFragment : Fragment() {
         super.onStart()
 
         lifecycleScope.launch {
-            val hola = DogDataService().getImagesByBreed()
-            Log.d("hola", hola.toString())
+//            val hola = DogDataService().getImagesByBreed("hound")
+//            val allBreeds = DogDataService().getAllBreeds()
+            val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
+            Log.d("imagesBySubBreed", imagesBySubBreed.toString())
+
         }
 
 

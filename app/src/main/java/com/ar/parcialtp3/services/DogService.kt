@@ -10,9 +10,12 @@ interface DogService {
     fun getAllBreeds(): Call<ResponseBody>
 
     @GET("breed/{breed}/images")
-    fun getImagesByBreed(@Path(value="breed") breed: String): Call<ResponseBody>
+    fun getImagesByBreed(@Path(value = "breed") breed: String): Call<ResponseBody>
 
     @GET("breed/{breed}/{sub-breed}/images")
-    fun getImagesBySubBreed(@Path(value="breed", encoded = true) breed: String): Call<ResponseBody>
+    fun getImagesBySubBreed(
+        @Path(value = "breed", encoded = true) breed: String,
+        @Path(value = "sub-breed", encoded = true) subBreed: String
+    ): Call<ResponseBody>
 
 }
