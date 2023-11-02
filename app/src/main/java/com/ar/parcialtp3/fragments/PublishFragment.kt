@@ -16,10 +16,13 @@ import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.entities.DogImages
 import com.ar.parcialtp3.entities.Provinces
 import com.ar.parcialtp3.services.ActivityServiceApiBuilder
+import com.ar.parcialtp3.services.DogDataService
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
@@ -89,31 +92,12 @@ class PublishFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val service = ActivityServiceApiBuilder.create()
-        service.getImagesByBreed("hound").enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                // Handle the response here
-                if (response.isSuccessful) {
-                    try {
-                        val responseBody = response.body()?.string()
-                        val jsonResponse = JSONObject(responseBody)
 
-                        val dataObject = jsonResponse.getJSONArray("message")
+        lifecycleScope.launch {
+            val hola = DogDataService().getImagesByBreed()
+            Log.d("hola", hola.toString())
+        }
 
-                        Log.d("response", dataObject.toString())
-                    }catch (e: JSONException){
-                        e.printStackTrace()
-                    }
-                    // Do something with the response body
-                } else {
-                    // Handle the error
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                // Handle the network call failure here
-            }
-        })
 
 
 
