@@ -52,5 +52,9 @@
         android:id="@+id/adoptionFragment"
         android:name="com.ar.parcialtp3.fragments.AdoptionFragment"
         android:label="fragment_adoption"
-        tools:layout="@layout/fragment_adoption" />
+        tools:layout="@layout/fragment_adoption" >
+        <action
+            android:id="@+id/action_adoptionFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 </navigation>
