@@ -37,6 +37,7 @@ import kotlinx.coroutines.selects.select
 class PublishFragment : Fragment() {
 
     lateinit var v: View
+
     init {
         retainInstance = true
     }
@@ -44,6 +45,7 @@ class PublishFragment : Fragment() {
 
     val MALE = "MALE"
     val FEMALE = "FEMALE"
+
     //Edit Text
     lateinit var edtAge: EditText
     lateinit var edtName: EditText
@@ -90,9 +92,11 @@ class PublishFragment : Fragment() {
         super.onAttach(context)
 
 
-        provincesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provincesList)
+        provincesAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provincesList)
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -111,8 +115,6 @@ class PublishFragment : Fragment() {
         selectedImages = mutableListOf()
 
 
-
-
         //Spinners initialization
 
         sharedPreferences =
@@ -129,30 +131,31 @@ class PublishFragment : Fragment() {
             breedsList = allBreeds.map { it.name.uppercase() }
             //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
             // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
-            breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
+            breedsAdapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
 
-                setUpSpinner(spnBreeds, breedsAdapter)
-                setUpSpinner(spnProvinces, provincesAdapter)
-                subBreedsAdapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    subBreedsList
-                )
-                setUpSpinner(spnSubBreeds, subBreedsAdapter)
+            setUpSpinner(spnBreeds, breedsAdapter)
+            setUpSpinner(spnProvinces, provincesAdapter)
+            subBreedsAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                subBreedsList
+            )
+            setUpSpinner(spnSubBreeds, subBreedsAdapter)
             val posSpnBreed = sharedPreferences.getInt("selectedBreed", 0)
             val posSpnSubBreed = sharedPreferences.getInt("selectedSubBreed", 0)
             val posSpnProvince = sharedPreferences.getInt("selectedProvince", 0)
-            if(posSpnBreed != 0){
+            if (posSpnBreed != 0) {
                 spnBreeds.setSelection(posSpnBreed)
                 selectedBreed = breedsList[posSpnBreed]
                 Log.d("selected breed", selectedBreed)
             }
-            if(posSpnSubBreed != 0){
+            if (posSpnSubBreed != 0) {
                 spnSubBreeds.setSelection(posSpnSubBreed)
                 selectedSubBreed = subBreedsList[posSpnSubBreed]
                 Log.d("selected ssssubbreed", selectedBreed)
             }
-            if(posSpnProvince != 0){
+            if (posSpnProvince != 0) {
                 spnProvinces.setSelection(posSpnProvince)
                 selectedProvince = provincesList[posSpnProvince]
                 Log.d("selected province", selectedBreed)
@@ -165,40 +168,75 @@ class PublishFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
             this.selectedImages = selectedImages
         }
 
-        handleRadioButtons()
+
         photosList = mutableListOf()
-        btnAddPhoto.setOnClickListener{
+        btnAddPhoto.setOnClickListener {
         }
 
-        btnPubish.setOnClickListener{
-            val temporaryImageArray = arrayListOf("https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
+        btnPubish.setOnClickListener {
+            val temporaryImageArray = arrayListOf(
+                "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
-                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg")
-            val dog = Dog(edtName.text.toString(), edtAge.text.toString().toInt(), selectedSex, selectedBreed, selectedSubBreed, ArrayList(selectedImages), false, edtWeight.text.toString().toInt())
+                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg"
+            )
+            handleRadioButtons()
+            val name = edtName.text.toString()
+            val age = edtAge.text.toString()
+            val sex = selectedSex
+            val breed = selectedBreed
+            val selImages = selectedImages
+            val weight = edtWeight.text.toString()
+            if (name.isEmpty() || age
+                    .isEmpty() || sex.isNullOrEmpty() || breed.isEmpty()
+                || selImages.isEmpty() || weight.isEmpty()
+            ){
+                Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val dog = Dog(
+                edtName.text.toString(),
+                edtAge.text.toString().toInt(),
+                selectedSex,
+                selectedBreed,
+                selectedSubBreed,
+                ArrayList(selectedImages),
+                false,
+                edtWeight.text.toString().toInt()
+            )
             val ownerName = sharedPreferences.getString("username", "")
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
-            val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
-            SavePublicationService().savePublication(publication)
-            val editor = sharedPreferences.edit()
-            editor.remove("selectedProvince")
-            editor.remove("selectedBreed")
-            editor.remove("selectedSubBreed")
-            editor.apply()
+            val publication =
+                PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString())
 
-            val action = PublishFragmentDirections.actionPublishFragmentSelf()
-            v.findNavController().navigate(action)
+
+                SavePublicationService().savePublication(publication)
+                val editor = sharedPreferences.edit()
+                editor.remove("selectedProvince")
+                editor.remove("selectedBreed")
+                editor.remove("selectedSubBreed")
+                editor.apply()
+
+                val action = PublishFragmentDirections.actionPublishFragmentSelf()
+                v.findNavController().navigate(action)
+
         }
 
     }
 
     private fun handleRadioButtons() {
+        selectedSex = ""
+        if(radioButtonFemale.isChecked){
+            selectedSex = FEMALE
+        }
+        if(radioButtonMale.isChecked){
+            selectedSex = MALE
+        }
         radioButtonFemale.setOnClickListener {
             selectedSex = FEMALE
             radioButtonMale.isChecked = false
@@ -221,10 +259,12 @@ class PublishFragment : Fragment() {
                         selectedProvince = provincesList[position]
                         selectedProvincePosition = position
                     }
+
                     spnBreeds -> {
                         selectedBreed = breedsList[position]
                         selectedBreedPosition = position
                     }
+
                     spnSubBreeds -> {
                         selectedSubBreed = subBreedsList[position]
                         selectedSubBreedPosition = position
@@ -245,23 +285,28 @@ class PublishFragment : Fragment() {
             }
         }
     }
+
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private fun getImages(selectedBreed: String, selectedSubBreed: String) {
         images = mutableListOf()
         lifecycleScope.launch {
-            if(selectedSubBreed!=""){
-                images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed.lowercase())
-              //  Log.d("imagesssss", images.toString())
-            }else{
+            if (selectedSubBreed != "") {
+                images = DogDataService().getImagesBySubBreed(
+                    selectedBreed.lowercase(),
+                    selectedSubBreed.lowercase()
+                )
+                //  Log.d("imagesssss", images.toString())
+            } else {
                 images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
-               // Log.d("Images By Breed", images.toString())
+                // Log.d("Images By Breed", images.toString())
             }
         }.invokeOnCompletion {
             btnAddPhoto.setOnClickListener {
                 val selectedImages = images
                 sharedViewModel.selectedImages.value = selectedImages
-                val action = PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
+                val action =
+                    PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
                 val editor = sharedPreferences.edit()
                 editor.putInt("selectedBreed", selectedBreedPosition)
                 editor.putInt("selectedSubBreed", selectedSubBreedPosition)
@@ -275,12 +320,12 @@ class PublishFragment : Fragment() {
     private fun getSubBreedsOf(selectedBreed: String) {
         lifecycleScope.launch {
             val allBreds = DogDataService().getAllBreeds()
-            val breed = allBreds.find {it.name.uppercase() == selectedBreed}
+            val breed = allBreds.find { it.name.uppercase() == selectedBreed }
             val subBreeds = breed?.subBreeds?.map { it.uppercase() }
 
             subBreedsList.clear()
 
-            if(subBreeds?.find { it != "[]" } != null){
+            if (subBreeds?.find { it != "[]" } != null) {
                 subBreedsList.addAll(subBreeds!!)
 
             }
