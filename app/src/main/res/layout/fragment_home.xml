@@ -22,6 +22,7 @@
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/poppins_regular"
             android:hint="Buscador"
+            android:textColorHint="#9C9C9C"
             android:padding="12dp"
             android:textSize="14sp" />
 
