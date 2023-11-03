@@ -45,7 +45,9 @@ class StartFragment : Fragment() {
         super.onStart()
 
         val editor = sharedPreferences.edit()
-
+        editor.remove("selectedProvince")
+        editor.remove("selectedBreed")
+        editor.remove("selectedSubBreed")
         btnLogin.setOnClickListener {
             if ((validate(edtName.text.toString()) && isOnlyLetters(edtName.text.toString())) && (validate(
                     edtPhone.text.toString()

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/publishLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -117,31 +118,10 @@
         android:visibility="gone" />
 
     <EditText
-        android:id="@+id/edtObservation"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/txtErrDescription"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Observacion" />
-
-    <TextView
-        android:id="@+id/txtErrObservation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Mail invalido"
-        android:layout_below="@+id/edtObservation"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
-    <EditText
         android:id="@+id/edtWeight"
         android:layout_width="300dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/txtErrObservation"
+        android:layout_below="@+id/txtErrDescription"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -158,40 +138,24 @@
         android:layout_below="@+id/edtWeight"
         android:textColor="#FF0000"
         android:visibility="gone" />
-    <LinearLayout
-        android:id="@+id/layoutPhotos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/errWeightEdt"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true">
 
-    <EditText
-        android:id="@+id/edtPhotos"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/errWeightEdt"
-        android:paddingStart="12dp"
-        android:inputType="textMultiLine"
-        android:layout_centerHorizontal="true"
-        android:hint="Ingrese la url de la foto"/>
+
+
         <Button
             android:id="@+id/btnAddPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+"></Button>
+            android:layout_below="@+id/errWeightEdt"
+            android:layout_centerHorizontal="true"
+            android:text="Agregar Fotos"></Button>
 
-    </LinearLayout>
+
     <RadioGroup
         android:id="@+id/radioGroupGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/layoutPhotos"
+        android:layout_below="@+id/btnAddPhoto"
         android:layout_marginTop="17dp">
 
         <LinearLayout
