@@ -1,5 +1,6 @@
 package com.ar.parcialtp3.fragments
 
+import ImageCardAdapter
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -19,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
@@ -31,6 +33,8 @@ import kotlinx.coroutines.launch
 class PublishFragment : Fragment() {
 
     lateinit var v: View
+
+
 
     val MALE = "MALE"
     val FEMALE = "FEMALE"
@@ -92,6 +96,9 @@ class PublishFragment : Fragment() {
         radioButtonFemale = v.findViewById(R.id.radioButtonFemale)
         btnPubish = v.findViewById(R.id.btnPublish)
         btnAddPhoto = v.findViewById(R.id.btnAddPhoto)
+
+
+
 
 
         //Spinners initialization
