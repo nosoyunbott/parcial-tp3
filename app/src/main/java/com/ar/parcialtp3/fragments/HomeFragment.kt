@@ -1,13 +1,19 @@
 package com.ar.parcialtp3.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ImageSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
@@ -20,18 +26,21 @@ import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.ar.parcialtp3.services.firebase.SavePublicationService
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
 
-    val getPublicationsService = GetPublicationsService()
+    private val getPublicationsService = GetPublicationsService()
 
-    lateinit var filterContainer: LinearLayout
+    private lateinit var publications: List<PublicationEntity>
 
-    lateinit var recCardList: RecyclerView
+    private lateinit var filterContainer: LinearLayout
+
+    private lateinit var recCardList: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
-    var cardList: MutableList<Card> = ArrayList()
+    private var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
 
     override fun onCreateView(
@@ -57,11 +66,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         cardListAdapter = CardAdapter(cardList, this)
         recCardList.adapter = cardListAdapter
 
-        refreshRecyclerView()
-
         getPublicationsService.getPublications(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
+                    publications =
+                        documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
+                    Log.d("SERVICE", publications.toString())
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
                         if (publication != null) {
@@ -73,7 +83,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.sex
                             )
                             cardList.add(dog)
-                            Log.d("asd",cardList.toString())
                         }
                     }
                 }
@@ -82,28 +91,58 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             cardListAdapter.notifyDataSetChanged()
         }
+        Handler().postDelayed({ refreshRecyclerView() }, 1500)
     }
 
     private fun refreshRecyclerView() {
-        val razas = listOf("Golden", "Caniche", "Salchicha")
-        for (filterName in razas) {
+
+        var selectedButton: Button? = null
+
+        val breeds = mutableSetOf<String>()
+        for (p in publications) {
+            breeds.add(p.dog.breed)
+        }
+        for (filterName in breeds) {
             val btnFilter = Button(context)
-            btnFilter.text = filterName
+            val spannableString = SpannableString("   $filterName")
+            val drawable = context?.resources?.getDrawable(R.drawable.fingerprint)
+
+            if (drawable != null) {
+                val imageWidthInPixels = 60
+                val imageHeightInPixels = 60
+
+                drawable.setBounds(0, 0, imageWidthInPixels, imageHeightInPixels)
+            }
+
+            val imageSpan = drawable?.let { ImageSpan(it, ImageSpan.ALIGN_BASELINE) }
+            spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btnFilter.text = spannableString
+            btnFilter.textSize = 16F
+
+
+            btnFilter.setBackgroundResource(R.drawable.button_transparent)
+
             val layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, // Width
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-            layoutParams.setMargins(10, 5, 10, 0)
+            layoutParams.setMargins(30, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
-            btnFilter.textSize = 16F
-            btnFilter.background = resources.getDrawable(R.drawable.rounded_violet_background)
+
+            var isClicked = false
 
             btnFilter.setOnClickListener {
-                val filter = btnFilter.text.toString()
                 val filteredList =
-                    cardList.filter { it.breed == filter } as MutableList
+                    cardList.filter { it.breed == filterName } as MutableList
                 cardListAdapter = CardAdapter(filteredList, this@HomeFragment)
                 recCardList.adapter = cardListAdapter
+
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+
+                btnFilter.setBackgroundResource(R.drawable.rounded_violet_background_big_radius)
+
+                selectedButton = btnFilter
             }
 
             filterContainer.addView(btnFilter)
