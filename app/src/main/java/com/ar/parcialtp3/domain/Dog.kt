@@ -7,7 +7,7 @@ class Dog(
     val breed: String,
     val subBreed: String,
     val images: ArrayList<String>,
-    val adopted: Boolean,
+    var adopted: Boolean,
     val weight: Int
 ) {
     constructor() : this("", 0, "", "", "", ArrayList(), false, 0)

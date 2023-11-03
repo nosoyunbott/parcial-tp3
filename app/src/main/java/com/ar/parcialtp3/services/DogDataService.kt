@@ -1,6 +1,11 @@
 package com.ar.parcialtp3.services
 
+import android.util.Log
 import com.ar.parcialtp3.domain.Breed
+import com.ar.parcialtp3.entities.PublicationEntity
+import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.getField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -32,6 +37,7 @@ class DogDataService {
             dataArray
         }
     }
+
     suspend fun getAllBreeds(): MutableList<Breed> {
         return withContext(Dispatchers.IO) {
             val service = ActivityServiceApiBuilder.create()
@@ -99,6 +105,33 @@ class DogDataService {
             }
 
             dataArray
+        }
+    }
+
+
+    companion object {
+        fun updateDogAdoptionState(userId: String) {
+
+            val db = FirebaseFirestore.getInstance()
+            val publicationsCollection = db.collection("Publications")
+            val getPublicationsService = GetPublicationsService()
+            val pubDocRef = publicationsCollection.document(userId)
+
+            pubDocRef.get().addOnSuccessListener { publicationDocument ->
+
+                val publication = publicationDocument.toObject(PublicationEntity::class.java)
+                if (publication != null) {
+                    Log.d("asd", publication.dog.adopted.toString())
+                    publication.dog.adopted = true
+                    val updates = hashMapOf<String, Any>(
+                        "dog.adopted" to true
+                    )
+
+                    pubDocRef.update(updates)
+                }
+
+            }
+
         }
     }
 }
