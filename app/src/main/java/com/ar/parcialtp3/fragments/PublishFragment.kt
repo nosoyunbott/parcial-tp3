@@ -18,10 +18,12 @@ import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
+import com.ar.parcialtp3.SharedViewModel
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
@@ -73,6 +75,7 @@ class PublishFragment : Fragment() {
     lateinit var selectedSex: String
     lateinit var sharedPreferences: SharedPreferences
 
+    lateinit var images: List<String>
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -136,17 +139,19 @@ class PublishFragment : Fragment() {
         handleRadioButtons()
         photosList = mutableListOf()
         btnAddPhoto.setOnClickListener{
-            if(photosList.size < 5){
-                photosList.add(edtPhotos.text.toString())
-            }else{
-                btnAddPhoto.isEnabled=false
-                btnAddPhoto.isClickable=false
-                Toast.makeText(
-                    context,
-                    "Has excedido el límite de selección de imágenes",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+//            if(photosList.size < 5){
+//                photosList.add(edtPhotos.text.toString())
+//            }else{
+//                btnAddPhoto.isEnabled=false
+//                btnAddPhoto.isClickable=false
+//                Toast.makeText(
+//                    context,
+//                    "Has excedido el límite de selección de imágenes",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//            val selectedImages = images
+//                sharedViewModel.selectedImages.value = selectedImages
         }
 
         btnPubish.setOnClickListener{
@@ -203,15 +208,24 @@ class PublishFragment : Fragment() {
             }
         }
     }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private fun getImages(selectedBreed: String, selectedSubBreed: String) {
+        images = mutableListOf()
         lifecycleScope.launch {
             if(selectedSubBreed!=""){
-                val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed.lowercase())
-                Log.d("imagesssss", images.toString())
+                images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed.lowercase())
+              //  Log.d("imagesssss", images.toString())
             }else{
-                val images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
-                Log.d("Images By Breed", images.toString())
+                images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
+               // Log.d("Images By Breed", images.toString())
+            }
+        }.invokeOnCompletion {
+            btnAddPhoto.setOnClickListener {
+                val selectedImages = images
+                sharedViewModel.selectedImages.value = selectedImages
+                val action = PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
+                v.findNavController().navigate(action)
             }
         }
     }

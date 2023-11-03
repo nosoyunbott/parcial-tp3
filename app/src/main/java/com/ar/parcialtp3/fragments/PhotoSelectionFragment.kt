@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
+import com.ar.parcialtp3.SharedViewModel
 
 class PhotoSelectionFragment : Fragment() {
     lateinit var v: View
@@ -18,7 +20,7 @@ class PhotoSelectionFragment : Fragment() {
     lateinit var photoRecyclerView: RecyclerView
     lateinit var imageCardAdapter: ImageCardAdapter
     lateinit var btnUpload: Button
-
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     val testRecycler = arrayListOf("https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
         "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
@@ -42,17 +44,20 @@ class PhotoSelectionFragment : Fragment() {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_photo_selection, container, false)
 
-
+        sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
+            imageCardAdapter = ImageCardAdapter(selectedImages)
+            photoRecyclerView.adapter = imageCardAdapter
+        }
         photoRecyclerView = v.findViewById(R.id.rec_imageCard_list)
         photoRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        imageCardAdapter = ImageCardAdapter(testRecycler)
-        photoRecyclerView.adapter = imageCardAdapter
+
         btnUpload = v.findViewById(R.id.btnUploadPhotos)
         return v
     }
 
     override fun onStart() {
         super.onStart()
+
         btnUpload.setOnClickListener {
             val selectedPhotos = imageCardAdapter.getSelectedPhotos()
             Log.d("selecte dphotos", selectedPhotos.toString())

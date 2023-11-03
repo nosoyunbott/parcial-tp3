@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/photoSelectionFragment">
+    app:startDestination="@id/publishFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.ar.parcialtp3.fragments.HomeFragment"
@@ -19,6 +19,9 @@
             app:destination="@id/publishFragment"
             app:popUpTo="@id/publishFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_publishFragment_to_photoSelectionFragment"
+            app:destination="@id/photoSelectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
