@@ -18,6 +18,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
@@ -153,6 +154,9 @@ class PublishFragment : Fragment() {
             val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
             SavePublicationService().savePublication(publication)
 
+
+            val action = PublishFragmentDirections.actionPublishFragmentSelf()
+            v.findNavController().navigate(action)
         }
 
     }
