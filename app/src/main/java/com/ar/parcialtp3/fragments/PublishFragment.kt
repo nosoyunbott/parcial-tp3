@@ -200,7 +200,7 @@ class PublishFragment : Fragment() {
     private fun getImages(selectedBreed: String, selectedSubBreed: String) {
         lifecycleScope.launch {
             if(selectedSubBreed!=""){
-                val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed)
+                val images = DogDataService().getImagesBySubBreed(selectedBreed.lowercase(), selectedSubBreed.lowercase())
                 Log.d("imagesssss", images.toString())
             }else{
                 val images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
@@ -213,7 +213,7 @@ class PublishFragment : Fragment() {
         lifecycleScope.launch {
             val allBreds = DogDataService().getAllBreeds()
             val breed = allBreds.find {it.name.uppercase() == selectedBreed}
-            val subBreeds = breed?.subBreeds
+            val subBreeds = breed?.subBreeds?.map { it.uppercase() }
 
             subBreedsList.clear()
 
