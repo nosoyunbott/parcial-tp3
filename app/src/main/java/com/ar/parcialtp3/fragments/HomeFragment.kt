@@ -1,13 +1,19 @@
 package com.ar.parcialtp3.fragments
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,31 +23,47 @@ import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import java.util.zip.Inflater
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
-
     val getPublicationsService = GetPublicationsService()
-
     lateinit var filterContainer: LinearLayout
-
+    lateinit var favouriteBtn: ImageButton
     lateinit var recCardList: RecyclerView
+    lateinit var cardRecycler: View
     private lateinit var linearLayoutManager: LinearLayoutManager
     var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
 
+
+    lateinit var cardInflater: LayoutInflater
+
+
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_home, container, false)
 
+
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
-
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
+
+        cardRecycler = inflater.inflate(R.layout.card_recycler, container, false)
+        favouriteBtn = cardRecycler.findViewById(R.id.favouriteBtn)
+
+        val fragmentContainer = v.findViewById<LinearLayout>(R.id.linearLayoutHome)
+        fragmentContainer.addView(cardRecycler)
+
+
+
+
+        Log.d("BOTON", favouriteBtn.toString())
 
         return v
     }
@@ -51,10 +73,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this)
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { position ->
+            Log.d("CLICK", position.toString())
+        })
         recCardList.adapter = cardListAdapter
-
         refreshRecyclerView()
+        favouriteBtn.setOnClickListener { Log.d("ANDROID", "forro") }
 
         getPublicationsService.getPublications(false) { documents, exception ->
             if (exception == null) {
@@ -79,8 +103,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             cardListAdapter.notifyDataSetChanged()
         }
+
+
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun refreshRecyclerView() {
         val razas = listOf("Golden", "Caniche", "Salchicha")
         for (filterName in razas) {
@@ -99,7 +126,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 val filter = btnFilter.text.toString()
                 val filteredList =
                     cardList.filter { it.breed == filter } as MutableList
-                cardListAdapter = CardAdapter(filteredList, this@HomeFragment)
+                cardListAdapter = CardAdapter(filteredList, this@HomeFragment,  onClickFavourite = { position ->
+                Log.d("CLICK", position.toString())
+
+                })
                 recCardList.adapter = cardListAdapter
             }
 
@@ -112,4 +142,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         val navController = v.findNavController()
         navController.navigate(action)
     }
+
+
 }

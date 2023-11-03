@@ -8,7 +8,11 @@ import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.holders.CardHolder
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 
-class CardAdapter(private val cardList: MutableList<Card>, private val onItemClick: OnViewItemClickedListener) :
+class CardAdapter(
+    private val cardList: MutableList<Card>,
+    private val onItemClick: OnViewItemClickedListener,
+    private val onClickFavourite:(Int) -> Unit,
+    ) :
 
     RecyclerView.Adapter<CardHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
@@ -28,11 +32,13 @@ class CardAdapter(private val cardList: MutableList<Card>, private val onItemCli
         holder.setAge(card.age)
         holder.setSex(card.sex)
 
-//        holder.setImage(card.image)
         holder.getCardLayout().setOnClickListener{
             onItemClick.onViewItemDetail(card)
         }
 
+        holder.getFavoriteButton().setOnClickListener {
+            onClickFavourite.invoke(position)
+        }
     }
 
 }

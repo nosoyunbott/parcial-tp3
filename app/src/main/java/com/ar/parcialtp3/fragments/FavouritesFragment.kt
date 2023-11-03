@@ -1,6 +1,7 @@
 package com.ar.parcialtp3.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,10 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this)
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { position ->
+
+
+        })
         recCardList.adapter = cardListAdapter
 
 
