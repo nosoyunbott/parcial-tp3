@@ -32,6 +32,9 @@
         <argument
             android:name="publicationId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailFragment_to_adoptionFragment"
+            app:destination="@id/adoptionFragment" />
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
