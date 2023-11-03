@@ -18,6 +18,7 @@ import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -31,6 +32,7 @@ import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.SavePublicationService
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 
 class PublishFragment : Fragment() {
 
@@ -138,14 +140,23 @@ class PublishFragment : Fragment() {
                     subBreedsList
                 )
                 setUpSpinner(spnSubBreeds, subBreedsAdapter)
-            val a = sharedPreferences.getInt("selectedBreed", 0)
-            if(a != 0){
-                spnBreeds.setSelection(a)
-                // selectedBreed = breedsList[sharedPreferences.getInt("selectedBreed", 0)]
-//                    sharedPreferences.edit().putInt("selectedBreed", selectedBreedPosition)
-//                    sharedPreferences.edit().apply()
-            }else{
-
+            val posSpnBreed = sharedPreferences.getInt("selectedBreed", 0)
+            val posSpnSubBreed = sharedPreferences.getInt("selectedSubBreed", 0)
+            val posSpnProvince = sharedPreferences.getInt("selectedProvince", 0)
+            if(posSpnBreed != 0){
+                spnBreeds.setSelection(posSpnBreed)
+                selectedBreed = breedsList[posSpnBreed]
+                Log.d("selected breed", selectedBreed)
+            }
+            if(posSpnSubBreed != 0){
+                spnSubBreeds.setSelection(posSpnSubBreed)
+                selectedSubBreed = subBreedsList[posSpnSubBreed]
+                Log.d("selected ssssubbreed", selectedBreed)
+            }
+            if(posSpnProvince != 0){
+                spnProvinces.setSelection(posSpnProvince)
+                selectedProvince = provincesList[posSpnProvince]
+                Log.d("selected province", selectedBreed)
             }
         }
 
@@ -157,7 +168,7 @@ class PublishFragment : Fragment() {
         super.onStart()
 
         sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
-            Log.d("selectedimageee", selectedImages.toString())
+            this.selectedImages = selectedImages
         }
 
         handleRadioButtons()
@@ -182,7 +193,7 @@ class PublishFragment : Fragment() {
             val temporaryImageArray = arrayListOf("https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg")
-            val dog = Dog(edtName.text.toString(), edtAge.text.toString().toInt(), selectedSex, selectedBreed, selectedSubBreed, temporaryImageArray, false, edtWeight.text.toString().toInt())
+            val dog = Dog(edtName.text.toString(), edtAge.text.toString().toInt(), selectedSex, selectedBreed, selectedSubBreed, ArrayList(selectedImages), false, edtWeight.text.toString().toInt())
             val ownerName = sharedPreferences.getString("username", "")
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
@@ -210,12 +221,11 @@ class PublishFragment : Fragment() {
 
     private fun setUpSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
-
+        selectedSubBreed = ""
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                selectedSubBreed = ""
                 when (spinner) {
                     spnProvinces -> {
                         selectedProvince = provincesList[position]
