@@ -1,5 +1,8 @@
 package com.ar.parcialtp3.holders
 
+
+import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -29,9 +32,10 @@ class CardHolder(v: View) : RecyclerView.ViewHolder(v) {
         txt.text = subBreed
     }
 
+    @SuppressLint("SetTextI18n")
     fun setAge(age: Int ) {
         val txt : TextView = view.findViewById(R.id.card_age)
-        txt.text = age.toString()
+        txt.text = "$age / "
     }
 
     fun setSex(sex: String ) {
