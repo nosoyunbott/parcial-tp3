@@ -13,7 +13,13 @@
         android:id="@+id/publishFragment"
         android:name="com.ar.parcialtp3.fragments.PublishFragment"
         android:label="fragment_publish"
-        tools:layout="@layout/fragment_publish" />
+        tools:layout="@layout/fragment_publish" >
+        <action
+            android:id="@+id/action_publishFragment_self"
+            app:destination="@id/publishFragment"
+            app:popUpTo="@id/publishFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.ar.parcialtp3.fragments.DetailFragment"
