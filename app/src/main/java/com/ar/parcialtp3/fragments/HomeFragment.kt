@@ -56,6 +56,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         refreshRecyclerView()
 
+        cardList.clear()
+
         getPublicationsService.getPublications(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
