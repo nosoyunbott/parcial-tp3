@@ -156,8 +156,12 @@ class DetailFragment : Fragment() {
                         txtDetailDescription.text = publication.description
 
                         //Button to adopt
-                        btnDetailAdopt.setOnClickListener {
-                            DogDataService.updateDogAdoptionState(documentId)
+                        if(!(publication.dog.adopted)) {
+                            btnDetailAdopt.setOnClickListener {
+                                DogDataService.updateDogAdoptionState(documentId)
+                            }
+                        } else {
+                            btnDetailAdopt.visibility = View.GONE
                         }
                     }
                 }
