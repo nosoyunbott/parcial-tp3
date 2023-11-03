@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
@@ -61,7 +62,8 @@ class PhotoSelectionFragment : Fragment() {
         btnUpload.setOnClickListener {
             val selectedPhotos = imageCardAdapter.getSelectedPhotos()
             Log.d("selecte dphotos", selectedPhotos.toString())
-
+            sharedViewModel.selectedImages.value = selectedPhotos.toList()
+            v.findNavController().popBackStack()
         }
     }
 }

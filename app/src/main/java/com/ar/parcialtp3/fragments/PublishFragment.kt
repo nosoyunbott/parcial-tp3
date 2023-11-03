@@ -35,7 +35,9 @@ import kotlinx.coroutines.launch
 class PublishFragment : Fragment() {
 
     lateinit var v: View
-
+    init {
+        retainInstance = true
+    }
 
 
     val MALE = "MALE"
@@ -76,6 +78,12 @@ class PublishFragment : Fragment() {
     lateinit var sharedPreferences: SharedPreferences
 
     lateinit var images: List<String>
+    lateinit var selectedImages: List<String>
+
+    var selectedBreedPosition: Int = 0
+    var selectedSubBreedPosition: Int = 0
+    var selectedProvincePosition: Int = 0
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -99,7 +107,7 @@ class PublishFragment : Fragment() {
         radioButtonFemale = v.findViewById(R.id.radioButtonFemale)
         btnPubish = v.findViewById(R.id.btnPublish)
         btnAddPhoto = v.findViewById(R.id.btnAddPhoto)
-
+        selectedImages = mutableListOf()
 
 
 
@@ -121,10 +129,24 @@ class PublishFragment : Fragment() {
             //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
             // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
             breedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
-            setUpSpinner(spnBreeds, breedsAdapter)
-            setUpSpinner(spnProvinces, provincesAdapter)
-            subBreedsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, subBreedsList)
-            setUpSpinner(spnSubBreeds, subBreedsAdapter)
+
+                setUpSpinner(spnBreeds, breedsAdapter)
+                setUpSpinner(spnProvinces, provincesAdapter)
+                subBreedsAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    subBreedsList
+                )
+                setUpSpinner(spnSubBreeds, subBreedsAdapter)
+            val a = sharedPreferences.getInt("selectedBreed", 0)
+            if(a != 0){
+                spnBreeds.setSelection(a)
+                // selectedBreed = breedsList[sharedPreferences.getInt("selectedBreed", 0)]
+//                    sharedPreferences.edit().putInt("selectedBreed", selectedBreedPosition)
+//                    sharedPreferences.edit().apply()
+            }else{
+
+            }
         }
 
 
@@ -134,7 +156,9 @@ class PublishFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-
+        sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
+            Log.d("selectedimageee", selectedImages.toString())
+        }
 
         handleRadioButtons()
         photosList = mutableListOf()
@@ -193,10 +217,23 @@ class PublishFragment : Fragment() {
             ) {
                 selectedSubBreed = ""
                 when (spinner) {
-                    spnProvinces -> selectedProvince = provincesList[position]
-                    spnBreeds -> selectedBreed = breedsList[position]
-                    spnSubBreeds -> selectedSubBreed = subBreedsList[position]
+                    spnProvinces -> {
+                        selectedProvince = provincesList[position]
+                        selectedProvincePosition = position
+                    }
+                    spnBreeds -> {
+                        selectedBreed = breedsList[position]
+                        selectedBreedPosition = position
+                    }
+                    spnSubBreeds -> {
+                        selectedSubBreed = subBreedsList[position]
+                        selectedSubBreedPosition = position
+                    }
                 }
+
+
+
+
                 getSubBreedsOf(selectedBreed)
                 getImages(selectedBreed, selectedSubBreed)
                 Log.d("subred", selectedSubBreed)
@@ -225,6 +262,11 @@ class PublishFragment : Fragment() {
                 val selectedImages = images
                 sharedViewModel.selectedImages.value = selectedImages
                 val action = PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
+                val editor = sharedPreferences.edit()
+                editor.putInt("selectedBreed", selectedBreedPosition)
+                editor.putInt("selectedSubBreed", selectedSubBreedPosition)
+                editor.putInt("selectedProvince", selectedProvincePosition)
+                editor.apply()
                 v.findNavController().navigate(action)
             }
         }
