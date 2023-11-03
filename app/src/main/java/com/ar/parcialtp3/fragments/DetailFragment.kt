@@ -18,8 +18,6 @@ import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.ImageAdapter
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
 
@@ -43,7 +41,8 @@ class DetailFragment : Fragment() {
         //TODO lateinit var para db
         init()
         setUpTransformer()
-
+         val publicationId = DetailFragmentArgs.fromBundle(requireArguments()).publicationId
+        Log.d("publicationId", publicationId)
         viewPager2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
