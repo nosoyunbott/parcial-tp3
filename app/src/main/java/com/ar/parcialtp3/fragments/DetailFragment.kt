@@ -44,6 +44,7 @@ class DetailFragment : Fragment() {
     lateinit var txtDetailEdad: TextView
     lateinit var txtDetailGender: TextView
     lateinit var txtDetailWeight: TextView
+    lateinit var txtDetailDescription: TextView
 
     lateinit var imgDetailOwner: ImageView
     lateinit var txtDetailUsername: TextView
@@ -69,6 +70,7 @@ class DetailFragment : Fragment() {
         txtDetailUsername = v.findViewById(R.id.txtDetailUsername)
         imgDetailPhone = v.findViewById(R.id.imgDetailPhone)
         btnDetailAdopt = v.findViewById(R.id.btnDetailAdopt)
+        txtDetailDescription = v.findViewById(R.id.txtDetailDescription)
         //
         init()
         setUpTransformer()
@@ -152,7 +154,10 @@ class DetailFragment : Fragment() {
                             intent.data = Uri.parse("tel:${publication.owner.phone}")
                             startActivity(intent)
                         }
+                        //Description
+                        txtDetailDescription.text = publication.description
 
+                        //Button to adopt
                         btnDetailAdopt.setOnClickListener {
                             DogDataService.updateDogAdoptionState(documentId)
                         }
