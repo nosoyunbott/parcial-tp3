@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
-
-
+    //splash
+    implementation("com.airbnb.android:lottie:5.2.0")
 
 }
