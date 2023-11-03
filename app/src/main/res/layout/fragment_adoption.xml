@@ -5,17 +5,36 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AdoptionFragment"
-    android:layout_marginTop="50dp">
+    tools:context=".fragments.AdoptionFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/adoptionRecyclerView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="72dp"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="55sp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Adoptados"
+                android:gravity="center_horizontal"
+                android:textSize="30sp"
+                android:fontFamily="@font/poppins_semibold"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/adoptionRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="72dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
