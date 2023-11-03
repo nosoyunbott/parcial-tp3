@@ -26,7 +26,6 @@ import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
 
@@ -55,8 +54,7 @@ class DetailFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_detail, container, false)
@@ -74,6 +72,8 @@ class DetailFragment : Fragment() {
         //
         init()
         setUpTransformer()
+
+
         viewPager2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -115,9 +115,7 @@ class DetailFragment : Fragment() {
         handler = Handler(Looper.myLooper()!!)
         imageList = ArrayList()
 
-        val documentId = "4w5MKWmy3tQ9pDE95Etg"
-        //TODO cambiar id y traer de la card
-
+        val documentId = DetailFragmentArgs.fromBundle(requireArguments()).publicationId
         getPublicationsService.getPublicationById(documentId) { document, exception ->
             if (exception == null) {
                 if (document != null) {
