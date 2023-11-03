@@ -1,5 +1,8 @@
 package com.ar.parcialtp3.fragments
 
+import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +40,12 @@ class DetailFragment : Fragment() {
     lateinit var txtDetailName: TextView
     lateinit var txtDetailLocation: TextView
     lateinit var txtDetailEdad: TextView
+    lateinit var txtDetailGender: TextView
+    lateinit var txtDetailWeight: TextView
+
+    lateinit var imgDetailOwner: ImageView
+    lateinit var txtDetailUsername: TextView
+    lateinit var imgDetailPhone: ImageView
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -49,6 +59,11 @@ class DetailFragment : Fragment() {
         txtDetailName = v.findViewById(R.id.txtDetailName)
         txtDetailLocation = v.findViewById(R.id.txtDetailLocation)
         txtDetailEdad = v.findViewById(R.id.txtDetailEdad)
+        txtDetailGender = v.findViewById(R.id.txtDetailGender)
+        txtDetailWeight = v.findViewById(R.id.txtDetailWeight)
+        imgDetailOwner = v.findViewById(R.id.imgDetailOwner)
+        txtDetailUsername = v.findViewById(R.id.txtDetailUsername)
+        imgDetailPhone = v.findViewById(R.id.imgDetailPhone)
         //
         init()
         setUpTransformer()
@@ -93,7 +108,7 @@ class DetailFragment : Fragment() {
         handler = Handler(Looper.myLooper()!!)
         imageList = ArrayList()
 
-        val documentId = "KPuDeYxakHBkM91fjQ7D"
+        val documentId = "4w5MKWmy3tQ9pDE95Etg"
         //TODO cambiar id y traer de la card
 
         getPublicationsService.getPublicationById(documentId) { document, exception ->
@@ -118,10 +133,24 @@ class DetailFragment : Fragment() {
                         txtDetailName.text = publication.dog.name
                         txtDetailLocation.text = publication.location
                         txtDetailEdad.text = publication.dog.age.toString()
+
+                        //Dog squares
+                        txtDetailGender.text = publication.dog.sex
+                        txtDetailWeight.text = "${publication.dog.weight}kg"
+
+                        //User data
+                        Glide.with(this).load(publication.owner.image).into(imgDetailOwner)
+                        txtDetailUsername.text = publication.owner.name
+                        //Phone to phone app
+                        imgDetailPhone.setOnClickListener {
+                            val intent = Intent(Intent.ACTION_DIAL)
+                            intent.data = Uri.parse("tel:${publication.owner.phone}")
+                            startActivity(intent)
+                        }
                     }
                 }
             } else {
-                Log.d("asd", "No hay publications")
+                Log.d("ErrorPublications", "No hay publications")
             }
         }
     }
