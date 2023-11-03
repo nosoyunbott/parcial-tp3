@@ -200,7 +200,11 @@ class PublishFragment : Fragment() {
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
             val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
             SavePublicationService().savePublication(publication)
-
+            val editor = sharedPreferences.edit()
+            editor.remove("selectedProvince")
+            editor.remove("selectedBreed")
+            editor.remove("selectedSubBreed")
+            editor.apply()
 
             val action = PublishFragmentDirections.actionPublishFragmentSelf()
             v.findNavController().navigate(action)
