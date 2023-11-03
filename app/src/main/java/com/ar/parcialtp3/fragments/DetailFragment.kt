@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.ImageAdapter
 import com.ar.parcialtp3.entities.PublicationEntity
+import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
@@ -47,6 +49,8 @@ class DetailFragment : Fragment() {
     lateinit var txtDetailUsername: TextView
     lateinit var imgDetailPhone: ImageView
 
+    lateinit var btnDetailAdopt: Button
+
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
@@ -64,6 +68,7 @@ class DetailFragment : Fragment() {
         imgDetailOwner = v.findViewById(R.id.imgDetailOwner)
         txtDetailUsername = v.findViewById(R.id.txtDetailUsername)
         imgDetailPhone = v.findViewById(R.id.imgDetailPhone)
+        btnDetailAdopt = v.findViewById(R.id.btnDetailAdopt)
         //
         init()
         setUpTransformer()
@@ -146,6 +151,10 @@ class DetailFragment : Fragment() {
                             val intent = Intent(Intent.ACTION_DIAL)
                             intent.data = Uri.parse("tel:${publication.owner.phone}")
                             startActivity(intent)
+                        }
+
+                        btnDetailAdopt.setOnClickListener {
+                            DogDataService.updateDogAdoptionState(documentId)
                         }
                     }
                 }
