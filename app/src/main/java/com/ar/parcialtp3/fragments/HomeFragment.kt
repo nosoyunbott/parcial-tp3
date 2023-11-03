@@ -8,18 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
-import com.ar.parcialtp3.domain.Dog
-import com.ar.parcialtp3.domain.Owner
-import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
-import com.ar.parcialtp3.services.firebase.SavePublicationService
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
@@ -59,6 +56,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         refreshRecyclerView()
 
+        cardList.clear()
+
         getPublicationsService.getPublications(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
@@ -70,10 +69,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.breed,
                                 publication.dog.subBreed,
                                 publication.dog.age,
-                                publication.dog.sex
+                                publication.dog.sex,
+                                d.id
                             )
                             cardList.add(dog)
-                            Log.d("asd",cardList.toString())
                         }
                     }
                 }
@@ -111,6 +110,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(card: Card) {
-        TODO("Not yet implemented")
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(card.id)
+        val navController = v.findNavController()
+        navController.navigate(action)
     }
 }

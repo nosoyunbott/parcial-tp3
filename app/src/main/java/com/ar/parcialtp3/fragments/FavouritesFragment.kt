@@ -42,7 +42,8 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
 
 
         for (i in 0 .. 5) {
-            val dog = Card("Falopa", "Salchicha", "Chicha", 20, "Macho", )
+
+            val dog = Card("Falopa", "Salchicha", "Chicha", 20, "Macho", "1" )
             cardList.add(dog)
         }
 

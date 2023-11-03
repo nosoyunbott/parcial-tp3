@@ -27,6 +27,7 @@ class CardAdapter(private val cardList: MutableList<Card>, private val onItemCli
         holder.setSubBreed(card.subBreed)
         holder.setAge(card.age)
         holder.setSex(card.sex)
+
 //        holder.setImage(card.image)
         holder.getCardLayout().setOnClickListener{
             onItemClick.onViewItemDetail(card)
