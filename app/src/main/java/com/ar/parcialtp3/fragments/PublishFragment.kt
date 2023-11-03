@@ -49,7 +49,7 @@ class PublishFragment : Fragment() {
     lateinit var edtName: EditText
     lateinit var edtDescription: EditText
     lateinit var edtWeight: EditText
-    lateinit var edtPhotos: EditText
+
     lateinit var radioButtonMale: RadioButton
     lateinit var radioButtonFemale: RadioButton
     lateinit var btnPubish: Button
@@ -104,7 +104,6 @@ class PublishFragment : Fragment() {
         edtName = v.findViewById(R.id.edtName)
         edtDescription = v.findViewById(R.id.edtDescription)
         edtWeight = v.findViewById(R.id.edtWeight)
-        edtPhotos = v.findViewById(R.id.edtPhotos)
         radioButtonMale = v.findViewById(R.id.radioButtonMale)
         radioButtonFemale = v.findViewById(R.id.radioButtonFemale)
         btnPubish = v.findViewById(R.id.btnPublish)
@@ -174,19 +173,6 @@ class PublishFragment : Fragment() {
         handleRadioButtons()
         photosList = mutableListOf()
         btnAddPhoto.setOnClickListener{
-//            if(photosList.size < 5){
-//                photosList.add(edtPhotos.text.toString())
-//            }else{
-//                btnAddPhoto.isEnabled=false
-//                btnAddPhoto.isClickable=false
-//                Toast.makeText(
-//                    context,
-//                    "Has excedido el límite de selección de imágenes",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//            val selectedImages = images
-//                sharedViewModel.selectedImages.value = selectedImages
         }
 
         btnPubish.setOnClickListener{
