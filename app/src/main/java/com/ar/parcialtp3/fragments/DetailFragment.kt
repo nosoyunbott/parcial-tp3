@@ -1,5 +1,8 @@
 package com.ar.parcialtp3.fragments
 
+import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +11,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -17,7 +23,9 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.ImageAdapter
 import com.ar.parcialtp3.entities.PublicationEntity
+import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
 
@@ -30,19 +38,42 @@ class DetailFragment : Fragment() {
     private lateinit var adapter: ImageAdapter
     private val getPublicationsService = GetPublicationsService()
 
+    lateinit var txtDetailName: TextView
+    lateinit var txtDetailLocation: TextView
+    lateinit var txtDetailEdad: TextView
+    lateinit var txtDetailGender: TextView
+    lateinit var txtDetailWeight: TextView
+    lateinit var txtDetailDescription: TextView
+
+    lateinit var imgDetailOwner: ImageView
+    lateinit var txtDetailUsername: TextView
+    lateinit var imgDetailPhone: ImageView
+
+    lateinit var btnDetailAdopt: Button
+
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_detail, container, false)
         //TODO lateinit var para db
+        txtDetailName = v.findViewById(R.id.txtDetailName)
+        txtDetailLocation = v.findViewById(R.id.txtDetailLocation)
+        txtDetailEdad = v.findViewById(R.id.txtDetailEdad)
+        txtDetailGender = v.findViewById(R.id.txtDetailGender)
+        txtDetailWeight = v.findViewById(R.id.txtDetailWeight)
+        imgDetailOwner = v.findViewById(R.id.imgDetailOwner)
+        txtDetailUsername = v.findViewById(R.id.txtDetailUsername)
+        imgDetailPhone = v.findViewById(R.id.imgDetailPhone)
+        btnDetailAdopt = v.findViewById(R.id.btnDetailAdopt)
+        txtDetailDescription = v.findViewById(R.id.txtDetailDescription)
+        //
         init()
         setUpTransformer()
-         val publicationId = DetailFragmentArgs.fromBundle(requireArguments()).publicationId
-        Log.d("publicationId", publicationId)
+
+
         viewPager2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -84,13 +115,13 @@ class DetailFragment : Fragment() {
         handler = Handler(Looper.myLooper()!!)
         imageList = ArrayList()
 
-        val documentId = "KPuDeYxakHBkM91fjQ7D"
-
+        val documentId = DetailFragmentArgs.fromBundle(requireArguments()).publicationId
         getPublicationsService.getPublicationById(documentId) { document, exception ->
             if (exception == null) {
                 if (document != null) {
                     val publication = document.toObject(PublicationEntity::class.java)
                     if (publication != null) {
+                        //Img carrousel
                         imageList.clear()
                         for (i in 0 until publication.dog.images.size) {
                             imageList.add(publication.dog.images[i])
@@ -102,10 +133,36 @@ class DetailFragment : Fragment() {
                         viewPager2.clipToPadding = false
                         viewPager2.clipChildren = false
                         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+                        //Dog data
+                        txtDetailName.text = publication.dog.name
+                        txtDetailLocation.text = publication.location
+                        txtDetailEdad.text = publication.dog.age.toString()
+
+                        //Dog squares
+                        txtDetailGender.text = publication.dog.sex
+                        txtDetailWeight.text = "${publication.dog.weight}kg"
+
+                        //User data
+                        Glide.with(this).load(publication.owner.image).into(imgDetailOwner)
+                        txtDetailUsername.text = publication.owner.name
+                        //Phone to phone app
+                        imgDetailPhone.setOnClickListener {
+                            val intent = Intent(Intent.ACTION_DIAL)
+                            intent.data = Uri.parse("tel:${publication.owner.phone}")
+                            startActivity(intent)
+                        }
+                        //Description
+                        txtDetailDescription.text = publication.description
+
+                        //Button to adopt
+                        btnDetailAdopt.setOnClickListener {
+                            DogDataService.updateDogAdoptionState(documentId)
+                        }
                     }
                 }
             } else {
-                Log.d("asd", "No hay publications")
+                Log.d("ErrorPublications", "No hay publications")
             }
         }
     }
