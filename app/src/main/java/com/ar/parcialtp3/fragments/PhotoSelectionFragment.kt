@@ -58,7 +58,6 @@ class PhotoSelectionFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         btnUpload.setOnClickListener {
             val selectedPhotos = imageCardAdapter.getSelectedPhotos()
             Log.d("selecte dphotos", selectedPhotos.toString())

@@ -192,7 +192,7 @@ class PublishFragment : Fragment() {
             val weight = edtWeight.text.toString()
             if (name.isEmpty() || age
                     .isEmpty() || sex.isNullOrEmpty() || breed.isEmpty()
-                || selImages.isEmpty() || weight.isEmpty()
+                || selImages.isEmpty() || weight.isEmpty() || selImages.size > 5
             ){
                 Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -221,7 +221,7 @@ class PublishFragment : Fragment() {
                 editor.remove("selectedBreed")
                 editor.remove("selectedSubBreed")
                 editor.apply()
-
+                sharedViewModel.resetData()
                 val action = PublishFragmentDirections.actionPublishFragmentSelf()
                 v.findNavController().navigate(action)
 
@@ -303,8 +303,9 @@ class PublishFragment : Fragment() {
             }
         }.invokeOnCompletion {
             btnAddPhoto.setOnClickListener {
-                val selectedImages = images
-                sharedViewModel.selectedImages.value = selectedImages
+                val selectImages = images
+                sharedViewModel.selectedImages.value = selectImages
+                Log.d("ss", selectImages.toString())
                 val action =
                     PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
                 val editor = sharedPreferences.edit()
