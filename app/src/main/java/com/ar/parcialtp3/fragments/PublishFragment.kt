@@ -25,7 +25,7 @@ import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
-import com.ar.parcialtp3.services.firebase.SavePublicationService
+import com.ar.parcialtp3.services.firebase.FirebaseService
 import kotlinx.coroutines.launch
 
 class PublishFragment : Fragment() {
@@ -152,7 +152,7 @@ class PublishFragment : Fragment() {
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
             val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
-            SavePublicationService().savePublication(publication)
+            FirebaseService().savePublication(publication)
 
 
             val action = PublishFragmentDirections.actionPublishFragmentSelf()

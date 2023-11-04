@@ -37,10 +37,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
 
-
-    lateinit var cardInflater: LayoutInflater
-
-
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,8 +69,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { position ->
-            Log.d("CLICK", position.toString())
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
+            Log.d("id", id)
         })
         recCardList.adapter = cardListAdapter
         refreshRecyclerView()
@@ -107,6 +103,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     }
 
+
+    fun setPublicationAsFavourite(position: Int) {
+        Log.d("position", position.toString())
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun refreshRecyclerView() {
         val razas = listOf("Golden", "Caniche", "Salchicha")
@@ -126,10 +127,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 val filter = btnFilter.text.toString()
                 val filteredList =
                     cardList.filter { it.breed == filter } as MutableList
-                cardListAdapter = CardAdapter(filteredList, this@HomeFragment,  onClickFavourite = { position ->
-                Log.d("CLICK", position.toString())
+                cardListAdapter =
+                    CardAdapter(filteredList, this@HomeFragment, onClickFavourite = { position ->
+                        Log.d("CLICK", position.toString())
 
-                })
+                    })
                 recCardList.adapter = cardListAdapter
             }
 

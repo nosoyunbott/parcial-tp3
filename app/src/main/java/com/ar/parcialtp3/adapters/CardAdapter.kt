@@ -11,7 +11,7 @@ import com.ar.parcialtp3.listener.OnViewItemClickedListener
 class CardAdapter(
     private val cardList: MutableList<Card>,
     private val onItemClick: OnViewItemClickedListener,
-    private val onClickFavourite:(Int) -> Unit,
+    private val onClickFavourite:(String) -> Unit,
     ) :
 
     RecyclerView.Adapter<CardHolder>() {
@@ -37,7 +37,7 @@ class CardAdapter(
         }
 
         holder.getFavoriteButton().setOnClickListener {
-            onClickFavourite.invoke(position)
+            onClickFavourite.invoke(card.id)
         }
     }
 
