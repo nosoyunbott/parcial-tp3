@@ -26,6 +26,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:inputType="number"
         android:fontFamily="@font/poppins_regular"
         android:hint="Edad"
         android:layout_centerHorizontal="true" />
@@ -134,6 +135,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:inputType="number"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/poppins_regular"
         android:hint="Peso" />
