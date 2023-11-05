@@ -1,5 +1,7 @@
 package com.ar.parcialtp3.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -38,9 +40,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
 
-
-    // Initialize a handler for debouncing user input
-
     private val firebaseService = FirebaseService()
     private lateinit var publications: List<PublicationEntity>
     private lateinit var searchEditText: AutoCompleteTextView
@@ -53,15 +52,18 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_home, container, false)
-        dogServiceAPI=DogDataService()
+        dogServiceAPI= DogDataService()
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
+        sharedPreferences =
+            requireContext().getSharedPreferences("search_suggestions", Context.MODE_PRIVATE)
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
@@ -160,30 +162,45 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         // Check if suggestions for the input are available in the cache
         val cachedSuggestions = getCachedSuggestions(input)
         if (cachedSuggestions != null) {
-            // Suggestions found in cache; update the adapter
+
             suggestionAdapter.clear()
             suggestionAdapter.addAll(cachedSuggestions)
             suggestionAdapter.notifyDataSetChanged()
         } else {
-            // Suggestions not found in cache; fetch data from the API
 
             val breeds:List<Breed> = dogServiceAPI.getAllBreeds()
-            val breedList = breeds.map { it.name }
+
+            val breedSet = mutableSetOf<String>()
+
+            for (breed in breeds) {
+                breedSet.add(breed.name)
+                breedSet.addAll(breed.subBreeds)
+            }
+
+            val breedList = breedSet.toList()
+
+
+            cacheSuggestions(input, breedList)
             suggestionAdapter.clear()
             suggestionAdapter.addAll(breedList)
             suggestionAdapter.notifyDataSetChanged()
 
-            // Make an API request based on the user's input
-            // Cache the API response for future use
-            // Update the suggestionAdapter with the new suggestions
+
         }
     }
 
     // Function to retrieve cached suggestions
     private fun getCachedSuggestions(input: String): List<String>? {
-        // Implement your caching logic here
-        // Return cached suggestions if available, or null if not found
-        return null
+        val cachedSuggestions = sharedPreferences.getStringSet(input, null)
+        return cachedSuggestions?.toList()
+    }
+
+
+
+    private fun cacheSuggestions(input: String, suggestions: List<String>) {
+        val editor = sharedPreferences.edit()
+        editor.putStringSet(input, suggestions.toSet())
+        editor.apply()
     }
 
     private fun refreshRecyclerView() {
