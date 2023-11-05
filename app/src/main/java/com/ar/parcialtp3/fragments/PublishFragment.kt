@@ -25,14 +25,21 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.SharedViewModel
+import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
+
+import com.google.firebase.Timestamp
+
 import com.ar.parcialtp3.services.firebase.FirebaseService
+
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import java.time.LocalDate
+import java.util.Date
 
 class PublishFragment : Fragment() {
 
@@ -87,6 +94,8 @@ class PublishFragment : Fragment() {
     var selectedBreedPosition: Int = 0
     var selectedSubBreedPosition: Int = 0
     var selectedProvincePosition: Int = 0
+
+    val fireBaseService = FirebaseService()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -171,19 +180,31 @@ class PublishFragment : Fragment() {
         sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
             this.selectedImages = selectedImages
         }
-
-
         photosList = mutableListOf()
-        btnAddPhoto.setOnClickListener {
-        }
 
+        fireBaseService.getPublicationsOrderedByDate(false) { documents, exception ->
+            if (exception == null) {
+                if (documents != null) {
+                    for (d in documents) {
+                        val publication = d.toObject(PublicationEntity::class.java)
+                        if (publication != null) {
+                            Log.d("descripcion", publication.description)
+
+                        }
+                    }
+                }
+            } else {
+                Log.d("asd", exception.toString())
+            }
+        }
+        handleRadioButtons()
         btnPubish.setOnClickListener {
             val temporaryImageArray = arrayListOf(
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg"
             )
-            handleRadioButtons()
+
             val name = edtName.text.toString()
             val age = edtAge.text.toString()
             val sex = selectedSex
@@ -211,8 +232,12 @@ class PublishFragment : Fragment() {
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
-            val publication = PublicationEntity(dog, owner, selectedProvince,edtDescription.text.toString())
-            FirebaseService().savePublication(publication)
+            //val currentDate = Date()
+            val timeStamp = Timestamp.now()
+            Log.d("timestamp", timeStamp.toString())
+            val publication =
+                PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString(), timeStamp)
+            fireBaseService.savePublication(publication)
 
                 val editor = sharedPreferences.edit()
                 editor.remove("selectedProvince")
@@ -279,7 +304,6 @@ class PublishFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //showDialog()
             }
         }
     }
@@ -334,9 +358,4 @@ class PublishFragment : Fragment() {
 
     }
 
-    private fun showDialog() {
-        val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ERROR SPINNER")
-            .setCancelable(true).create()
-        dialog.show()
-    }
 }
