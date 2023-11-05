@@ -31,8 +31,11 @@ import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.SavePublicationService
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import java.time.LocalDate
+import java.util.Date
 
 class PublishFragment : Fragment() {
 
@@ -171,11 +174,8 @@ class PublishFragment : Fragment() {
         sharedViewModel.selectedImages.observe(viewLifecycleOwner) { selectedImages ->
             this.selectedImages = selectedImages
         }
-
-
         photosList = mutableListOf()
-        btnAddPhoto.setOnClickListener {
-        }
+
 
         btnPubish.setOnClickListener {
             val temporaryImageArray = arrayListOf(
@@ -211,8 +211,12 @@ class PublishFragment : Fragment() {
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
+            val currentDate = LocalDate.now()
+            val timeStamp = Timestamp(Date(currentDate.toEpochDay() * 24 * 3600 * 1000))
+            Log.d("current date", currentDate.toString())
+            Log.d("timestamp", timeStamp.toString())
             val publication =
-                PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString())
+                PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString(), timeStamp)
 
 
                 SavePublicationService().savePublication(publication)
@@ -281,7 +285,6 @@ class PublishFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //showDialog()
             }
         }
     }
@@ -336,9 +339,4 @@ class PublishFragment : Fragment() {
 
     }
 
-    private fun showDialog() {
-        val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ERROR SPINNER")
-            .setCancelable(true).create()
-        dialog.show()
-    }
 }
