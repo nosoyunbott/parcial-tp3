@@ -26,7 +26,7 @@ import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.ImageAdapter
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import com.ar.parcialtp3.services.firebase.FirebaseService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
@@ -38,7 +38,7 @@ class DetailFragment : Fragment() {
     private lateinit var handler: Handler
     private lateinit var imageList: ArrayList<String>
     private lateinit var adapter: ImageAdapter
-    private val getPublicationsService = GetPublicationsService()
+    private val firebaseService = FirebaseService()
 
     lateinit var txtDetailName: TextView
     lateinit var txtDetailLocation: TextView
@@ -118,7 +118,7 @@ class DetailFragment : Fragment() {
         imageList = ArrayList()
 
         val documentId = DetailFragmentArgs.fromBundle(requireArguments()).publicationId
-        getPublicationsService.getPublicationById(documentId) { document, exception ->
+        firebaseService.getPublicationById(documentId) { document, exception ->
             if (exception == null) {
                 if (document != null) {
                     val publication = document.toObject(PublicationEntity::class.java)

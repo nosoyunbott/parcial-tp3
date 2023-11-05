@@ -31,9 +31,11 @@ import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
-import com.ar.parcialtp3.services.firebase.SavePublicationService
+
 import com.google.firebase.Timestamp
+
+import com.ar.parcialtp3.services.firebase.FirebaseService
+
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import java.time.LocalDate
@@ -92,6 +94,8 @@ class PublishFragment : Fragment() {
     var selectedBreedPosition: Int = 0
     var selectedSubBreedPosition: Int = 0
     var selectedProvincePosition: Int = 0
+
+    val fireBaseService = FirebaseService()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -178,7 +182,7 @@ class PublishFragment : Fragment() {
         }
         photosList = mutableListOf()
 
-        GetPublicationsService().getPublicationsOrderedByDate(false) { documents, exception ->
+        fireBaseService.getPublicationsOrderedByDate(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
                     for (d in documents) {
@@ -233,9 +237,8 @@ class PublishFragment : Fragment() {
             Log.d("timestamp", timeStamp.toString())
             val publication =
                 PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString(), timeStamp)
+            fireBaseService.savePublication(publication)
 
-
-                SavePublicationService().savePublication(publication)
                 val editor = sharedPreferences.edit()
                 editor.remove("selectedProvince")
                 editor.remove("selectedBreed")
