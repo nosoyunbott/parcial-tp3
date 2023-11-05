@@ -25,11 +25,13 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.SharedViewModel
+import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.services.DogDataService
+import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.ar.parcialtp3.services.firebase.SavePublicationService
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
@@ -176,7 +178,21 @@ class PublishFragment : Fragment() {
         }
         photosList = mutableListOf()
 
+        GetPublicationsService().getPublicationsOrderedByDate(false) { documents, exception ->
+            if (exception == null) {
+                if (documents != null) {
+                    for (d in documents) {
+                        val publication = d.toObject(PublicationEntity::class.java)
+                        if (publication != null) {
+                            Log.d("descripcion", publication.description)
 
+                        }
+                    }
+                }
+            } else {
+                Log.d("asd", exception.toString())
+            }
+        }
         btnPubish.setOnClickListener {
             val temporaryImageArray = arrayListOf(
                 "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
@@ -211,9 +227,8 @@ class PublishFragment : Fragment() {
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
-            val currentDate = LocalDate.now()
-            val timeStamp = Timestamp(Date(currentDate.toEpochDay() * 24 * 3600 * 1000))
-            Log.d("current date", currentDate.toString())
+            //val currentDate = Date()
+            val timeStamp = Timestamp.now()
             Log.d("timestamp", timeStamp.toString())
             val publication =
                 PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString(), timeStamp)

@@ -3,12 +3,16 @@ package com.ar.parcialtp3.services.firebase
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
 class GetPublicationsService {
     private val db = FirebaseFirestore.getInstance()
 
-    fun getPublications(isAdopted: Boolean, callback: (List<DocumentSnapshot>?, Exception?) -> Unit) {
+    fun getPublications(
+        isAdopted: Boolean,
+        callback: (List<DocumentSnapshot>?, Exception?) -> Unit
+    ) {
         db.collection("Publications")
             .whereEqualTo("dog.adopted", isAdopted)
             .get()
@@ -54,4 +58,22 @@ class GetPublicationsService {
                 }
             }
     }
+
+    fun getPublicationsOrderedByDate(
+        isAdopted: Boolean,
+        callback: (List<DocumentSnapshot>?, Exception?) -> Unit
+    ) {
+        db.collection("Publications")
+            .whereEqualTo("dog.adopted", isAdopted).orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result: QuerySnapshot? = task.result
+                    callback(result?.documents, null)
+                } else {
+                    callback(null, task.exception)
+                }
+            }
+    }
+
 }
