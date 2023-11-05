@@ -59,7 +59,8 @@ class AdoptionFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.subBreed,
                                 publication.dog.age,
                                 publication.dog.sex,
-                                d.id
+                                d.id,
+                                publication.location
                             )
                             cardList.add(dog)
                         }
