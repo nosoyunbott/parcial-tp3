@@ -19,7 +19,7 @@ import com.ar.parcialtp3.utils.SharedPrefUtils
 import com.google.firebase.ktx.Firebase
 
 class FavouritesFragment : Fragment(), OnViewItemClickedListener {
-
+    lateinit var sharedPrefUtils: SharedPrefUtils
     lateinit var v: View
     lateinit var recCardList: RecyclerView
     var cardList: MutableList<Card> = ArrayList()
@@ -31,6 +31,7 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_favourites, container, false)
         recCardList = v.findViewById(R.id.rec_card_list)
+        sharedPrefUtils = SharedPrefUtils(requireContext())
         return v
     }
 
@@ -41,12 +42,11 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
-            SharedPrefUtils().removeFromFavourites(id, requireContext())
-
+            sharedPrefUtils.toggleFavorite(id)
         })
         recCardList.adapter = cardListAdapter
 
-        val favList = SharedPrefUtils().getFavouritesFromSharedPrefs(requireContext())
+        val favList = sharedPrefUtils.getFavouritesFromSharedPrefs()
         for (fav in favList) {
             FirebaseService().getPublicationById(fav) { document, exception ->
                 if (exception == null) {

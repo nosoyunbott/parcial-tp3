@@ -4,58 +4,72 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 
-class SharedPrefUtils {
-    private lateinit var sharedPreferences: SharedPreferences
+class SharedPrefUtils(val context: Context) {
+    private var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
     private lateinit var listOfFavourites: MutableSet<String>
+    val editor = sharedPreferences.edit()
 
-    fun setFavouritePublication(id: String, context: Context) {
-        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        listOfFavourites =
-            sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
-                ?: mutableSetOf()
+    private fun getFavorites(): MutableSet<String> {
+        return sharedPreferences.getStringSet("favourites", mutableSetOf()) ?: mutableSetOf()
+    }
 
+
+    /**
+     * Agrega favorito/remueve favorito
+     */
+    fun toggleFavorite(id: String) {
+        val favorites = getFavorites()
         val editor = sharedPreferences.edit()
 
-        if (listOfFavourites == null) {
-            listOfFavourites = mutableSetOf()
+        if (favorites.contains(id)) {
+            favorites.remove(id)
+        } else {
+            favorites.add(id)
         }
 
-        Log.d("sharedPref", listOfFavourites.toString())
-
-        listOfFavourites.add(id)
-        editor.putStringSet("favourites", listOfFavourites)
+        editor.putStringSet("favourites", favorites)
         editor.apply()
     }
 
 
-    fun resetFavourites(context: Context) {
-        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+    /**
+     * Borra la lista de favoritos
+     */
+    fun resetFavourites() {
         val editor = sharedPreferences.edit()
         editor.remove("favourites")
         editor.apply()
     }
 
-    fun removeFromFavourites(id: String, context: Context) {
-        //TODO implemetación para sacar de favoritos
-    }
 
-    fun getFavouritesFromSharedPrefs(context: Context): MutableSet<String> {
-        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+    /**
+     * Devuelve la lista de favoritos guardada en sharedPrefs
+     */
+    fun getFavouritesFromSharedPrefs(): MutableSet<String> {
         var listOfFavourites: MutableSet<String> =
             sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
                 ?: mutableSetOf()
-
         return listOfFavourites
-
     }
 
 
-    fun isItemFavourite(id: String, context: Context): Boolean {
-        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+    /**
+     * Chequea si un item está en la lista de favoritos.
+     */
+    fun isItemFavourite(id: String): Boolean {
         listOfFavourites =
             sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
                 ?: mutableSetOf()
 
         return listOfFavourites.contains(id)
+    }
+
+
+    fun saveUserToSharedPref(username: String, phone: String, image: String,) {
+        editor.putString("username", username)
+        editor.putString("phone", phone)
+        editor.putString("image", image)
+        editor.apply()
     }
 }

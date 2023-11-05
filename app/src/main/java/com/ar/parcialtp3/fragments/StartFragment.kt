@@ -25,7 +25,7 @@ class StartFragment : Fragment() {
     lateinit var btnLogin: Button
 
     //Shared
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPrefUtils: SharedPrefUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +37,14 @@ class StartFragment : Fragment() {
         edtPhone = v.findViewById(R.id.edtPhone)
         edtImage = v.findViewById(R.id.edtImage)
         btnLogin = v.findViewById(R.id.btnLogin)
-        sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        sharedPrefUtils = SharedPrefUtils(requireContext())
         return v
     }
 
     override fun onStart() {
         super.onStart()
-        SharedPrefUtils().resetFavourites(requireContext())
-        val editor = sharedPreferences.edit()
+
+        sharedPrefUtils.resetFavourites()
 
         btnLogin.setOnClickListener {
             if ((validate(edtName.text.toString()) && isOnlyLetters(edtName.text.toString())) && (validate(
@@ -54,10 +53,11 @@ class StartFragment : Fragment() {
                     edtImage.text.toString()
                 )
             ) {
-                editor.putString("username", edtName.text.toString())
-                editor.putString("phone", edtPhone.text.toString())
-                editor.putString("image", edtImage.text.toString())
-                editor.apply()
+                sharedPrefUtils.saveUserToSharedPref(
+                    edtName.text.toString(),
+                    edtPhone.text.toString(),
+                    edtImage.text.toString()
+                )
 
                 Toast.makeText(requireContext(), "Bienvenido, ${edtName.text}!", Toast.LENGTH_SHORT)
 

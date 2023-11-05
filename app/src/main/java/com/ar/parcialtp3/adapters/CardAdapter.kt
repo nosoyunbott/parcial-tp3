@@ -14,15 +14,15 @@ import com.ar.parcialtp3.utils.SharedPrefUtils
 class CardAdapter(
     private val cardList: MutableList<Card>,
     private val onItemClick: OnViewItemClickedListener,
-    private val onClickFavourite:(String) -> Unit,
-    ) :
-
+    private val onClickFavourite: (String) -> Unit,
+) :
 
 
     RecyclerView.Adapter<CardHolder>() {
     lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.card_recycler, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.card_recycler, parent, false)
         return (CardHolder(view))
     }
 
@@ -33,7 +33,7 @@ class CardAdapter(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-       context = recyclerView.context
+        context = recyclerView.context
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
@@ -44,7 +44,7 @@ class CardAdapter(
         holder.setAge(card.age)
         holder.setSex(card.sex)
 
-        holder.getCardLayout().setOnClickListener{
+        holder.getCardLayout().setOnClickListener {
             onItemClick.onViewItemDetail(card)
         }
 
@@ -53,11 +53,16 @@ class CardAdapter(
         }
 
 
-        if(SharedPrefUtils().isItemFavourite(card.id, context)) {
-            holder.getFavoriteButton().findViewById<ImageButton>(R.id.favouriteBtn) .setBackgroundResource(R.drawable.adoption_icon)
+        if (SharedPrefUtils(context).isItemFavourite(card.id)) {
+            holder.getFavoriteButton().findViewById<ImageButton>(R.id.favouriteBtn)
+                .setImageResource(R.drawable.fav_icon)
+        } else {
+            holder.getFavoriteButton().findViewById<ImageButton>(R.id.favouriteBtn)
+                .setImageResource(R.drawable.unfaved_icon)
         }
 
 
     }
+
 
 }

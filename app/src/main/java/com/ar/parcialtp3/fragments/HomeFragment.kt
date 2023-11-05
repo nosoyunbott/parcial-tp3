@@ -63,8 +63,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
+
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
-            SharedPrefUtils().setFavouritePublication(id, requireContext())
+            SharedPrefUtils(requireContext()).toggleFavorite(id)
+            val itemOnList = cardList.indexOfFirst { it.id == id }
+            cardListAdapter.notifyItemChanged(itemOnList)
+
         })
         recCardList.adapter = cardListAdapter
         refreshRecyclerView()
@@ -84,22 +88,22 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 d.id
                             )
                             cardList.add(dog)
+
                         }
+
                     }
                 }
             } else {
                 Log.d("asd", "No hay publications")
             }
             cardListAdapter.notifyDataSetChanged()
+
         }
 
 
     }
 
 
-    fun setPublicationAsFavourite(position: Int) {
-        Log.d("position", position.toString())
-    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun refreshRecyclerView() {
