@@ -65,7 +65,8 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
                                 publication?.dog?.age,
                                 publication?.dog?.sex,
                                 document.id,
-                                publication?.location
+                                publication?.location,
+                                publication?.dog?.adopted
                             )
                         )
 

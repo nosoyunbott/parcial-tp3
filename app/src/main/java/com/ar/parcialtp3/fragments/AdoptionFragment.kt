@@ -42,7 +42,7 @@ class AdoptionFragment : Fragment(), OnViewItemClickedListener {
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
         //TODO Ver si se puede hacer un constructor diferente o hacer interfaces para evitar tener que pasar más parametros donde no hace falta
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->})
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { _, _ ->})
         recCardList.adapter = cardListAdapter
 
         cardList.clear()
@@ -60,7 +60,8 @@ class AdoptionFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.age,
                                 publication.dog.sex,
                                 d.id,
-                                publication.location
+                                publication.location,
+                                publication.dog.adopted
                             )
                             cardList.add(dog)
                         }

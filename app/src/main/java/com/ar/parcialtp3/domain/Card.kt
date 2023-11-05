@@ -3,7 +3,7 @@ package com.ar.parcialtp3.domain
 import android.os.Parcel
 import android.os.Parcelable
 
-class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, id: String?, location: String?): Parcelable {
+class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, id: String?, location: String?, adopted: Boolean?): Parcelable {
 
     var name: String = ""
     var breed: String = ""
@@ -12,6 +12,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
     var sex: String = ""
     var id: String = ""
     var location: String = ""
+    var adopted: Boolean = false
 //    var image: String = ""
 
 
@@ -22,7 +23,8 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readBoolean()
     )
 
     init {
@@ -33,7 +35,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         this.sex = sex!!
         this.id = id!!
         this.location = location!!
-
+        this.adopted = adopted!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -43,6 +45,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.writeInt(age)
         parcel.writeString(sex)
         parcel.writeString(location)
+        parcel.writeBoolean(adopted)
     }
 
     override fun describeContents(): Int {

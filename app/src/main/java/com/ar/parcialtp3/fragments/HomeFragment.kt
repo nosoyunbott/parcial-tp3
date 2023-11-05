@@ -104,8 +104,9 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.age,
                                 publication.dog.sex,
                                 d.id,
-                                publication.location
-                                )
+                                publication.location,
+                                publication.dog.adopted
+                            )
                             cardList.add(dog)
                         }
                     }
