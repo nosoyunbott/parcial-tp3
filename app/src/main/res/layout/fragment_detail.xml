@@ -20,6 +20,7 @@
 
     <TextView
         android:id="@+id/txtDetailName"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -31,6 +32,7 @@
 
     <TextView
         android:id="@+id/txtDetailLocation"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -51,6 +53,7 @@
 
     <TextView
         android:id="@+id/txtDetailEdad"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -62,6 +65,7 @@
 
     <TextView
         android:id="@+id/txtDetailGender"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -75,6 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_regular"
         android:text="Sex"
         android:textSize="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -94,6 +99,7 @@
 
     <TextView
         android:id="@+id/txtDetailWeight"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -104,6 +110,7 @@
 
     <TextView
         android:id="@+id/txtDetailWeightDefault"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -187,7 +194,7 @@
             android:id="@+id/imgDetailOwner"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@null"
             app:layout_constraintBottom_toTopOf="@+id/guideline9"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -215,6 +222,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Dueño"
+        android:fontFamily="@font/poppins_regular"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
@@ -223,6 +231,7 @@
         android:id="@+id/txtDetailUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
@@ -243,6 +252,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ADOPTAR"
+        android:fontFamily="@font/poppins_semibold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -253,6 +263,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="34dp"
+        android:fontFamily="@font/poppins_regular"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/btnDetailAdopt"
         app:layout_constraintEnd_toEndOf="parent"

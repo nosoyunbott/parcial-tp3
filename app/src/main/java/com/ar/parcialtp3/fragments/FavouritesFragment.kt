@@ -49,6 +49,7 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
 
         })
         recCardList.adapter = cardListAdapter
+        cardList.clear()
 
         val favList = sharedPrefUtils.getFavouritesFromSharedPrefs()
         for (fav in favList) {

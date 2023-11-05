@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -156,8 +158,19 @@ class DetailFragment : Fragment() {
                         txtDetailDescription.text = publication.description
 
                         //Button to adopt
-                        btnDetailAdopt.setOnClickListener {
-                            DogDataService.updateDogAdoptionState(documentId)
+                        if(!(publication.dog.adopted)) {
+                            btnDetailAdopt.setOnClickListener {
+                                DogDataService.updateDogAdoptionState(documentId)
+                                Toast.makeText(requireContext(), "Adoptaste al perrito ${publication.dog.name}, cuidalo!", Toast.LENGTH_SHORT).show()
+                                Handler().postDelayed(
+                                    {
+                                        val action = DetailFragmentDirections.actionDetailFragmentToAdoptionFragment()
+                                        v.findNavController().navigate(action)
+                                    }
+                                , 1500)
+                            }
+                        } else {
+                            btnDetailAdopt.visibility = View.GONE
                         }
                     }
                 }

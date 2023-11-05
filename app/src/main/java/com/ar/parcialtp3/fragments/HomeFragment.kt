@@ -1,17 +1,17 @@
 package com.ar.parcialtp3.fragments
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ImageSpan
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,37 +23,33 @@ import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.FirebaseService
 import com.ar.parcialtp3.utils.SharedPrefUtils
 
+
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
-    val firebaseService = FirebaseService()
-    lateinit var filterContainer: LinearLayout
-    lateinit var favouriteBtn: ImageButton
-    lateinit var recCardList: RecyclerView
-    lateinit var cardRecycler: View
+
+
+    private val firebaseService = FirebaseService()
+    private lateinit var publications: List<PublicationEntity>
+
+    private lateinit var filterContainer: LinearLayout
+
+    private lateinit var recCardList: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
-    var cardList: MutableList<Card> = ArrayList()
+    private var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_home, container, false)
 
-
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
+
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
-
-        cardRecycler = inflater.inflate(R.layout.card_recycler, container, false)
-        favouriteBtn = cardRecycler.findViewById(R.id.favouriteBtn)
-
-        val fragmentContainer = v.findViewById<LinearLayout>(R.id.linearLayoutHome)
-        fragmentContainer.addView(cardRecycler)
-
 
         return v
     }
@@ -63,7 +59,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
             val itemOnList = cardList.indexOfFirst { it.id == id }
@@ -71,12 +66,15 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         })
         recCardList.adapter = cardListAdapter
-        refreshRecyclerView()
+
+        cardList.clear()
 
         firebaseService.getPublications(false) { documents, exception ->
             if (exception == null) {
-                cardList.clear()
                 if (documents != null) {
+                    publications =
+                        documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
+                    Log.d("SERVICE", publications.toString())
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
                         if (publication != null) {
@@ -89,51 +87,67 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 d.id
                             )
                             cardList.add(dog)
-
                         }
-
                     }
                 }
             } else {
                 Log.d("asd", "No hay publications")
             }
             cardListAdapter.notifyDataSetChanged()
-
         }
-
-
+        Handler().postDelayed({ refreshRecyclerView() }, 2500)
+        //TODO Mejorar esto a una coroutina porque me crasheo un par de veces, lo tuve que pasar a 2500ms
     }
 
-
-    override fun onStop() {
-        super.onStop()
-
-
-    }
-
-
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun refreshRecyclerView() {
-        val razas = listOf("Golden", "Caniche", "Salchicha")
-        for (filterName in razas) {
+
+        var selectedButton: Button? = null
+
+        val breeds = mutableSetOf<String>()
+        for (p in publications) {
+            breeds.add(p.dog.breed)
+        }
+        for (filterName in breeds) {
             val btnFilter = Button(context)
-            btnFilter.text = filterName
+            val spannableString = SpannableString("   $filterName")
+            val drawable = context?.resources?.getDrawable(R.drawable.fingerprint)
+
+            if (drawable != null) {
+                val imageWidthInPixels = 60
+                val imageHeightInPixels = 60
+
+                drawable.setBounds(0, 0, imageWidthInPixels, imageHeightInPixels)
+            }
+
+            val imageSpan = drawable?.let { ImageSpan(it, ImageSpan.ALIGN_BASELINE) }
+            spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btnFilter.text = spannableString
+            btnFilter.textSize = 16F
+
+
+            btnFilter.setBackgroundResource(R.drawable.button_transparent)
+
             val layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, // Width
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-            layoutParams.setMargins(10, 5, 10, 0)
+            layoutParams.setMargins(30, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
-            btnFilter.textSize = 16F
-            btnFilter.background = resources.getDrawable(R.drawable.rounded_violet_background)
+
+            var isClicked = false
 
             btnFilter.setOnClickListener {
-                val filter = btnFilter.text.toString()
                 val filteredList =
-                    cardList.filter { it.breed == filter } as MutableList
-                cardListAdapter =
-                    CardAdapter(filteredList, this@HomeFragment, onClickFavourite = { _, _ ->}) //TODO Esta funcion aca no sirve
+                    cardList.filter { it.breed == filterName } as MutableList
+                cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position ->})
                 recCardList.adapter = cardListAdapter
+
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+
+                btnFilter.setBackgroundResource(R.drawable.rounded_violet_background_big_radius)
+
+                selectedButton = btnFilter
             }
 
             filterContainer.addView(btnFilter)
@@ -145,6 +159,4 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         val navController = v.findNavController()
         navController.navigate(action)
     }
-
-
 }
