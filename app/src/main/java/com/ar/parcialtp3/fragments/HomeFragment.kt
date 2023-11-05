@@ -22,6 +22,7 @@ import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.FirebaseService
 import com.ar.parcialtp3.utils.SharedPrefUtils
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
@@ -91,12 +92,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                     }
                 }
             } else {
-                Log.d("asd", "No hay publications")
+                Snackbar.make(v, "No hay publicaciones disponibles", Snackbar.LENGTH_SHORT).show()
             }
             cardListAdapter.notifyDataSetChanged()
+            refreshRecyclerView()
         }
-        Handler().postDelayed({ refreshRecyclerView() }, 2500)
-        //TODO Mejorar esto a una coroutina porque me crasheo un par de veces, lo tuve que pasar a 2500ms
     }
 
     private fun refreshRecyclerView() {

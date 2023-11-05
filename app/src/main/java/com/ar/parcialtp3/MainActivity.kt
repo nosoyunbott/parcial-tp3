@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener {item ->
             when(item.itemId){
                 R.id.homeFragment ->{
-                    navHostFragment.navController.navigate(R.id.homeFragment)
+                    navHostFragment.navController.popBackStack(R.id.homeFragment, false)
                     true
                 }
                 R.id.favouritesFragment -> {
