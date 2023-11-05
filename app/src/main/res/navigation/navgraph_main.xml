@@ -37,7 +37,11 @@
         android:id="@+id/favouritesFragment"
         android:name="com.ar.parcialtp3.fragments.FavouritesFragment"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_favouritesFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.ar.parcialtp3.fragments.SettingsFragment"

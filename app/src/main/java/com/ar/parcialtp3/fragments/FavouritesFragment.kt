@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
@@ -46,7 +47,6 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
         recCardList.adapter = cardListAdapter
 
         val favList = SharedPrefUtils().getFavouritesFromSharedPrefs(requireContext())
-        Log.d("LISTA FAVORITOS", favList.toString())
         for (fav in favList) {
             FirebaseService().getPublicationById(fav) { document, exception ->
                 if (exception == null) {
@@ -72,11 +72,12 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
             }
         }
 
-
     }
 
     override fun onViewItemDetail(card: Card) {
-        TODO("Not yet implemented")
+        val action = FavouritesFragmentDirections.actionFavouritesFragmentToDetailFragment(card.id)
+        val navController = v.findNavController()
+        navController.navigate(action)
     }
 
 }
