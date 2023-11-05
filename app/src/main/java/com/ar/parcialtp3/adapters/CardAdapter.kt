@@ -14,7 +14,7 @@ import com.ar.parcialtp3.utils.SharedPrefUtils
 class CardAdapter(
     private val cardList: MutableList<Card>,
     private val onItemClick: OnViewItemClickedListener,
-    private val onClickFavourite: (String) -> Unit,
+    private val onClickFavourite: (String, Int) -> Unit
 ) :
 
 
@@ -49,7 +49,7 @@ class CardAdapter(
         }
 
         holder.getFavoriteButton().setOnClickListener {
-            onClickFavourite.invoke(card.id)
+            onClickFavourite.invoke(card.id, position)
         }
 
 

@@ -64,7 +64,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
 
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
             val itemOnList = cardList.indexOfFirst { it.id == id }
             cardListAdapter.notifyItemChanged(itemOnList)
@@ -75,6 +75,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         firebaseService.getPublications(false) { documents, exception ->
             if (exception == null) {
+                cardList.clear()
                 if (documents != null) {
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
@@ -104,6 +105,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     }
 
 
+    override fun onStop() {
+        super.onStop()
+
+
+    }
+
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun refreshRecyclerView() {
@@ -125,10 +132,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 val filteredList =
                     cardList.filter { it.breed == filter } as MutableList
                 cardListAdapter =
-                    CardAdapter(filteredList, this@HomeFragment, onClickFavourite = { position ->
-                        Log.d("CLICK", position.toString())
-
-                    })
+                    CardAdapter(filteredList, this@HomeFragment, onClickFavourite = { _, _ ->}) //TODO Esta funcion aca no sirve
                 recCardList.adapter = cardListAdapter
             }
 

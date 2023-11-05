@@ -41,8 +41,12 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position ->
             sharedPrefUtils.toggleFavorite(id)
+            val itemOnList = cardList.indexOfFirst { it.id == id }
+            cardList.removeAt(position)
+            cardListAdapter.notifyDataSetChanged()
+
         })
         recCardList.adapter = cardListAdapter
 
