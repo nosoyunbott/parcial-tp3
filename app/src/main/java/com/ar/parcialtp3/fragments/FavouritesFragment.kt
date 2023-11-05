@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
+import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
+import com.ar.parcialtp3.services.firebase.FirebaseService
+import com.ar.parcialtp3.utils.SharedPrefUtils
+import com.google.firebase.ktx.Firebase
 
 class FavouritesFragment : Fragment(), OnViewItemClickedListener {
 
@@ -21,8 +25,7 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var cardListAdapter: CardAdapter
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_favourites, container, false)
@@ -31,25 +34,44 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
     }
 
 
-
-
     override fun onStart() {
         super.onStart()
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { position ->
-
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
+            SharedPrefUtils().removeFromFavourites(id, requireContext())
 
         })
         recCardList.adapter = cardListAdapter
 
+        val favList = SharedPrefUtils().getFavouritesFromSharedPrefs(requireContext())
+        Log.d("LISTA FAVORITOS", favList.toString())
+        for (fav in favList) {
+            FirebaseService().getPublicationById(fav) { document, exception ->
+                if (exception == null) {
+                    if (document != null) {
+                        val publication = document.toObject(PublicationEntity::class.java)
+                        cardList.add(
+                            Card(
+                                publication?.dog?.name,
+                                publication?.dog?.breed,
+                                publication?.dog?.subBreed,
+                                publication?.dog?.age,
+                                publication?.dog?.sex,
+                                document.id
+                            )
+                        )
 
-        for (i in 0 .. 5) {
+                    }
 
-            val dog = Card("Falopa", "Salchicha", "Chicha", 20, "Macho", "1" )
-            cardList.add(dog)
+                } else {
+                    Log.d("asd", "No hay Favoritos")
+                }
+                cardListAdapter.notifyDataSetChanged()
+            }
         }
+
 
     }
 

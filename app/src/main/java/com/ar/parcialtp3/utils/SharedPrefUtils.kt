@@ -3,7 +3,6 @@ package com.ar.parcialtp3.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 
 class SharedPrefUtils {
     private lateinit var sharedPreferences: SharedPreferences
@@ -11,7 +10,9 @@ class SharedPrefUtils {
 
     fun setFavouritePublication(id: String, context: Context) {
         sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        listOfFavourites = sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        listOfFavourites =
+            sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
 
         val editor = sharedPreferences.edit()
 
@@ -32,5 +33,19 @@ class SharedPrefUtils {
         val editor = sharedPreferences.edit()
         editor.remove("favourites")
         editor.apply()
+    }
+
+    fun removeFromFavourites(id: String, context: Context) {
+        //TODO implemetación para sacar de favoritos
+    }
+
+    fun getFavouritesFromSharedPrefs(context: Context): MutableSet<String> {
+        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        var listOfFavourites: MutableSet<String> =
+            sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
+
+        return listOfFavourites
+
     }
 }
