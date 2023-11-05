@@ -44,9 +44,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var cardListAdapter: CardAdapter
 
     private lateinit var moreFiltersTextView: TextView
+    private lateinit var clearFiltersTextView: TextView
+    private lateinit var createDateTextView: TextView
 
     private lateinit var breedFilter : String
     private lateinit var provinceFilter : String
+    private lateinit var btnFilter : Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +60,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
         moreFiltersTextView = v.findViewById(R.id.moreFiltersTextView)
+        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
+        createDateTextView = v.findViewById(R.id.createDateTextView)
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
@@ -165,8 +170,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             layoutParams.setMargins(30, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
 
-            var isClicked = false
-
             btnFilter.setOnClickListener {
                 breedFilter = filterName
                 filterCardList(provinceFilter, breedFilter)
@@ -177,6 +180,13 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
                 selectedButton = btnFilter
             }
+
+            clearFiltersTextView.setOnClickListener {
+                provinceFilter = ""
+                breedFilter = ""
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+                cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position -> })
+                recCardList.adapter = cardListAdapter        }
 
             filterContainer.addView(btnFilter)
         }
