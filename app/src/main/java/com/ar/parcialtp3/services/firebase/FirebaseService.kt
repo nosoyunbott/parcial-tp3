@@ -26,6 +26,37 @@ class FirebaseService {
                 }
         }
 
+    fun getPublicationsByBreedOrSubreed(breed:String,callback: (List<DocumentSnapshot>?, Exception?) -> Unit)
+    {
+
+        val collectionRef = db.collection("Publications")
+
+        val queryByBreed = collectionRef.whereEqualTo("dog.breed", breed)
+        val queryBySubBreed = collectionRef.whereEqualTo("dog.subBreed", breed)
+
+        val combinedResults = mutableListOf<DocumentSnapshot>()
+
+        queryByBreed.get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result: QuerySnapshot? = task.result
+                    result?.documents?.let { combinedResults.addAll(it) }
+                    queryBySubBreed.get()
+                        .addOnCompleteListener { subBreedTask ->
+                            if (subBreedTask.isSuccessful) {
+                                val subBreedResult: QuerySnapshot? = subBreedTask.result
+                                subBreedResult?.documents?.let { combinedResults.addAll(it) }
+                                callback(combinedResults, null)
+                            } else {
+                                callback(null, subBreedTask.exception)
+                            }
+                        }
+                } else {
+                    callback(null, task.exception)
+                }
+            }
+    }
+
 
     fun getPublicationById(documentId: String, callback: (DocumentSnapshot?, Exception?) -> Unit) {
         db.collection("Publications")

@@ -80,7 +80,32 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         // Set an item click listener for handling selection
         searchEditText.setOnItemClickListener { parent, view, position, id ->
             val selectedSuggestion = parent.getItemAtPosition(position).toString()
-            // Handle the selected suggestion (e.g., perform a search with the selected value)
+            firebaseService.getPublicationsByBreedOrSubreed(selectedSuggestion){ documents, exception ->
+                if (exception == null) {
+                    if (documents != null) {
+                        publications =
+                            documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
+                        Log.d("SERVICE", publications.toString())
+                        for (d in documents) {
+                            val publication = d.toObject(PublicationEntity::class.java)
+                            if (publication != null) {
+                                val dog = Card(
+                                    publication.dog.name,
+                                    publication.dog.breed,
+                                    publication.dog.subBreed,
+                                    publication.dog.age,
+                                    publication.dog.sex,
+                                    d.id
+                                )
+                                cardList.add(dog)
+                            }
+                        }
+                    }
+                } else {
+                    Log.d("asd", "No hay publications")
+                }
+                cardListAdapter.notifyDataSetChanged()
+            }
         }
 
 
