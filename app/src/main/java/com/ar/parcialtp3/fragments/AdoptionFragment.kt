@@ -14,14 +14,12 @@ import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import com.ar.parcialtp3.services.firebase.FirebaseService
 
 class AdoptionFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
-
-    val getPublicationsService = GetPublicationsService()
-
+    val firebaseService = FirebaseService()
     lateinit var recCardList: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     var cardList: MutableList<Card> = ArrayList()
@@ -43,12 +41,13 @@ class AdoptionFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this)
+        //TODO Ver si se puede hacer un constructor diferente o hacer interfaces para evitar tener que pasar más parametros donde no hace falta
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->})
         recCardList.adapter = cardListAdapter
 
         cardList.clear()
 
-        getPublicationsService.getPublications(true) { documents, exception ->
+        firebaseService.getPublications(true) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
                     for (d in documents) {

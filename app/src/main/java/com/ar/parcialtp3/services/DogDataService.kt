@@ -3,7 +3,6 @@ package com.ar.parcialtp3.services
 import android.util.Log
 import com.ar.parcialtp3.domain.Breed
 import com.ar.parcialtp3.entities.PublicationEntity
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.getField
 import kotlinx.coroutines.Dispatchers
@@ -114,7 +113,6 @@ class DogDataService {
 
             val db = FirebaseFirestore.getInstance()
             val publicationsCollection = db.collection("Publications")
-            val getPublicationsService = GetPublicationsService()
             val pubDocRef = publicationsCollection.document(userId)
 
             pubDocRef.get().addOnSuccessListener { publicationDocument ->

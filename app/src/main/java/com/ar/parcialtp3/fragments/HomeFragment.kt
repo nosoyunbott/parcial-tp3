@@ -20,15 +20,16 @@ import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
+import com.ar.parcialtp3.services.firebase.FirebaseService
+import com.ar.parcialtp3.utils.SharedPrefUtils
 
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
 
-    private val getPublicationsService = GetPublicationsService()
 
+    private val firebaseService = FirebaseService()
     private lateinit var publications: List<PublicationEntity>
 
     private lateinit var filterContainer: LinearLayout
@@ -58,12 +59,17 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this)
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _->
+            SharedPrefUtils(requireContext()).toggleFavorite(id)
+            val itemOnList = cardList.indexOfFirst { it.id == id }
+            cardListAdapter.notifyItemChanged(itemOnList)
+
+        })
         recCardList.adapter = cardListAdapter
 
         cardList.clear()
 
-        getPublicationsService.getPublications(false) { documents, exception ->
+        firebaseService.getPublications(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
                     publications =
@@ -89,7 +95,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             cardListAdapter.notifyDataSetChanged()
         }
-        Handler().postDelayed({ refreshRecyclerView() }, 1500)
+        Handler().postDelayed({ refreshRecyclerView() }, 2500)
+        //TODO Mejorar esto a una coroutina porque me crasheo un par de veces, lo tuve que pasar a 2500ms
     }
 
     private fun refreshRecyclerView() {
@@ -133,7 +140,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             btnFilter.setOnClickListener {
                 val filteredList =
                     cardList.filter { it.breed == filterName } as MutableList
-                cardListAdapter = CardAdapter(filteredList, this@HomeFragment)
+                cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position ->})
                 recCardList.adapter = cardListAdapter
 
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
