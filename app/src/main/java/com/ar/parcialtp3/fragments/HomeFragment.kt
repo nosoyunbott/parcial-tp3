@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _->
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
             val itemOnList = cardList.indexOfFirst { it.id == id }
             cardListAdapter.notifyItemChanged(itemOnList)
@@ -84,7 +84,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.subBreed,
                                 publication.dog.age,
                                 publication.dog.sex,
-                                d.id
+                                d.id,
+                                publication.dog.adopted,
                             )
                             cardList.add(dog)
                         }
@@ -95,8 +96,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             cardListAdapter.notifyDataSetChanged()
         }
-        Handler().postDelayed({ refreshRecyclerView() }, 2500)
-        //TODO Mejorar esto a una coroutina porque me crasheo un par de veces, lo tuve que pasar a 2500ms
+
     }
 
     private fun refreshRecyclerView() {
@@ -140,7 +140,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             btnFilter.setOnClickListener {
                 val filteredList =
                     cardList.filter { it.breed == filterName } as MutableList
-                cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position ->})
+                cardListAdapter =
+                    CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
                 recCardList.adapter = cardListAdapter
 
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
