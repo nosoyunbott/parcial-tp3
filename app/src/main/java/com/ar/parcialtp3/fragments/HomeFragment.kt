@@ -55,10 +55,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         fragmentContainer.addView(cardRecycler)
 
 
-
-
-        Log.d("BOTON", favouriteBtn.toString())
-
         return v
     }
 

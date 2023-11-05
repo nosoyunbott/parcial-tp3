@@ -48,4 +48,14 @@ class SharedPrefUtils {
         return listOfFavourites
 
     }
+
+
+    fun isItemFavourite(id: String, context: Context): Boolean {
+        sharedPreferences = context.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        listOfFavourites =
+            sharedPreferences.getStringSet("favourites", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
+
+        return listOfFavourites.contains(id)
+    }
 }
