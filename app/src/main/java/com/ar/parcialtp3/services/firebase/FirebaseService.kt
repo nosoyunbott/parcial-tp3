@@ -49,4 +49,5 @@ class FirebaseService {
         return newDocument.set(publication)
     }
 
+
 }

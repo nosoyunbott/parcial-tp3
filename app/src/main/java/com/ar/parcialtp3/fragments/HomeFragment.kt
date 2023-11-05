@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +20,13 @@ import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
-import com.ar.parcialtp3.services.firebase.GetPublicationsService
-import java.util.zip.Inflater
+import com.ar.parcialtp3.services.firebase.FirebaseService
+import com.ar.parcialtp3.utils.SharedPrefUtils
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
-    val getPublicationsService = GetPublicationsService()
+    val firebaseService = FirebaseService()
     lateinit var filterContainer: LinearLayout
     lateinit var favouriteBtn: ImageButton
     lateinit var recCardList: RecyclerView
@@ -70,13 +68,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id ->
-            Log.d("id", id)
+            SharedPrefUtils().setFavouritePublication(id, requireContext())
         })
         recCardList.adapter = cardListAdapter
         refreshRecyclerView()
-        favouriteBtn.setOnClickListener { Log.d("ANDROID", "forro") }
 
-        getPublicationsService.getPublications(false) { documents, exception ->
+        firebaseService.getPublications(false) { documents, exception ->
             if (exception == null) {
                 if (documents != null) {
                     for (d in documents) {

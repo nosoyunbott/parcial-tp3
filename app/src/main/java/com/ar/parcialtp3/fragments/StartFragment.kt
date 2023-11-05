@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.ar.parcialtp3.R
+import com.ar.parcialtp3.utils.SharedPrefUtils
 
 class StartFragment : Fragment() {
 
@@ -43,7 +44,7 @@ class StartFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
+        SharedPrefUtils().resetFavourites(requireContext())
         val editor = sharedPreferences.edit()
 
         btnLogin.setOnClickListener {
