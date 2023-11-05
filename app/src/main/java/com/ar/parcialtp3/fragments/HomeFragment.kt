@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_home, container, false)
-
+        dogServiceAPI=DogDataService()
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
 
