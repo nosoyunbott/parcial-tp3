@@ -56,6 +56,17 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/provinceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/poppins_regular"
+            android:background="@drawable/rounded_violet_background_big_radius"
+            android:textSize="13sp"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/moreFiltersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

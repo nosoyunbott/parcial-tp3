@@ -46,6 +46,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var moreFiltersTextView: TextView
     private lateinit var clearFiltersTextView: TextView
     private lateinit var createDateTextView: TextView
+    private lateinit var provinceTextView: TextView
 
     private lateinit var breedFilter : String
     private lateinit var provinceFilter : String
@@ -63,6 +64,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         moreFiltersTextView = v.findViewById(R.id.moreFiltersTextView)
         clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
         createDateTextView = v.findViewById(R.id.createDateTextView)
+        provinceTextView = v.findViewById(R.id.provinceTextView)
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
@@ -129,6 +131,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 provinceFilter = menuItem.title.toString()
+                provinceTextView.text = provinceFilter
+                provinceTextView.visibility = View.VISIBLE
                 filterCardList(provinceFilter, breedFilter)
                 true
             }
@@ -195,6 +199,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position -> })
                 recCardList.adapter = cardListAdapter
                 filteredList = cardList.toMutableList()
+                provinceTextView.visibility = View.GONE
             }
 
             filterContainer.addView(btnFilter)
