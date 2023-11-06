@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.holders.CardHolder
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.utils.SharedPrefUtils
+import com.bumptech.glide.Glide
 
 class CardAdapter(
     private val cardList: MutableList<Card>,
@@ -39,6 +42,7 @@ class CardAdapter(
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
+
         val card = cardList[position]
         holder.setName(card.name)
         holder.setBreed(card.breed)
@@ -66,6 +70,12 @@ class CardAdapter(
         if(card.adopted) {
             holder.getFavoriteButton().findViewById<ImageButton>(R.id.favouriteBtn).visibility = View.GONE
         }
+
+        val cardImage = holder.getCardLayout().findViewById<ImageView>(R.id.card_image)
+        val imageUrl = card.image
+        Glide.with(holder.itemView.context)
+            .load(imageUrl)
+            .into(cardImage)
     }
 
 

@@ -20,28 +20,28 @@ class CardHolder(v: View) : RecyclerView.ViewHolder(v) {
 
     fun setName(name: String ) {
         val txt : TextView = view.findViewById(R.id.card_name)
-        txt.text = name
+        txt.text = name.uppercase()
     }
 
     fun setBreed(breed: String ) {
         val txt : TextView = view.findViewById(R.id.card_breed)
-        txt.text = breed
+        txt.text = breed.uppercase()
     }
 
     fun setSubBreed(subBreed: String ) {
         val txt : TextView = view.findViewById(R.id.card_subBreed)
-        txt.text = subBreed
+        txt.text = subBreed.uppercase()
     }
 
     @SuppressLint("SetTextI18n")
     fun setAge(age: Int ) {
         val txt : TextView = view.findViewById(R.id.card_age)
-        txt.text = "$age / "
+        txt.text = "$age / ".uppercase()
     }
 
     fun setSex(sex: String ) {
         val txt : TextView = view.findViewById(R.id.card_sex)
-        txt.text = sex
+        txt.text = sex.uppercase()
     }
 
     fun getFavoriteButton(): ImageButton {
