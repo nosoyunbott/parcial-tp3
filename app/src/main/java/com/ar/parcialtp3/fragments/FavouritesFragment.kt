@@ -67,7 +67,7 @@ class FavouritesFragment : Fragment(), OnViewItemClickedListener {
                                 document.id,
                                 publication?.location,
                                 publication?.dog?.adopted,
-                                document.getDate("timestamp")!!
+                                document.getDate("createDate")!!
                             )
                         )
 
