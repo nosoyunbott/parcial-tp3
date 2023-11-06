@@ -12,12 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Card
+import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.firebase.FirebaseService
@@ -40,6 +43,15 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
 
+    private lateinit var moreFiltersTextView: TextView
+    private lateinit var clearFiltersTextView: TextView
+    private lateinit var createDateTextView: TextView
+
+    private lateinit var breedFilter : String
+    private lateinit var provinceFilter : String
+    private lateinit var filteredList : MutableList<Card>
+    private var isAsc = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +60,9 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
+        moreFiltersTextView = v.findViewById(R.id.moreFiltersTextView)
+        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
+        createDateTextView = v.findViewById(R.id.createDateTextView)
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
@@ -60,6 +75,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
+
+        provinceFilter = ""
+        breedFilter = ""
+        filteredList = mutableListOf()
+
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
             val itemOnList = cardList.indexOfFirst { it.id == id }
@@ -75,7 +95,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 if (documents != null) {
                     publications =
                         documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
-                    Log.d("SERVICE", publications.toString())
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
                         if (publication != null) {
@@ -86,8 +105,11 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.age,
                                 publication.dog.sex,
                                 d.id,
+                                publication.location,
                                 publication.dog.adopted,
+                                d.getDate("timestamp")!!
                             )
+                            Log.d("Alo",dog.createDate.toString())
                             cardList.add(dog)
                         }
                     }
@@ -97,6 +119,25 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             }
             cardListAdapter.notifyDataSetChanged()
             refreshRecyclerView()
+        }
+        moreFiltersTextView.setOnClickListener { view ->
+            val popupMenu = PopupMenu(requireContext(), view)
+            val provincesArray = Provinces().getList()
+
+            for (province in provincesArray) {
+                popupMenu.menu.add(province)
+            }
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                provinceFilter = menuItem.title.toString()
+                filterCardList(provinceFilter, breedFilter)
+                true
+            }
+
+            popupMenu.show()
+        }
+
+        createDateTextView.setOnClickListener{
+            orderCardList()
         }
     }
 
@@ -136,14 +177,9 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             layoutParams.setMargins(30, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
 
-            var isClicked = false
-
             btnFilter.setOnClickListener {
-                val filteredList =
-                    cardList.filter { it.breed == filterName } as MutableList
-                cardListAdapter =
-                    CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
-                recCardList.adapter = cardListAdapter
+                breedFilter = filterName
+                filterCardList(provinceFilter, breedFilter)
 
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
 
@@ -152,7 +188,30 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 selectedButton = btnFilter
             }
 
+            clearFiltersTextView.setOnClickListener {
+                provinceFilter = ""
+                breedFilter = ""
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+                cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position -> })
+                recCardList.adapter = cardListAdapter
+                filteredList = cardList.toMutableList()
+            }
+
             filterContainer.addView(btnFilter)
+        }
+    }
+
+    private fun filterCardList(province: String, breed: String) {
+        filteredList = cardList.toMutableList()
+        if(province.isNotEmpty()){
+            filteredList = filteredList.filter { it.location == province } as MutableList
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            recCardList.adapter = cardListAdapter
+        }
+        if(breed.isNotEmpty()){
+            filteredList = filteredList.filter { it.breed == breed } as MutableList
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            recCardList.adapter = cardListAdapter
         }
     }
 
@@ -160,5 +219,21 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(card.id)
         val navController = v.findNavController()
         navController.navigate(action)
+    }
+
+    private fun orderCardList(){
+        if(filteredList.isEmpty()){
+            filteredList = cardList.toMutableList()
+        }
+        if(isAsc){
+            filteredList.sortBy { it.createDate }
+            isAsc = false
+        }else{
+            filteredList.sortByDescending { it.createDate }
+            isAsc = true
+        }
+        cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+        recCardList.adapter = cardListAdapter
+        cardListAdapter.notifyDataSetChanged()
     }
 }
