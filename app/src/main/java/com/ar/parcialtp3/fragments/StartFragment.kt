@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.navigation.findNavController
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.utils.SharedPrefUtils
@@ -26,6 +27,13 @@ class StartFragment : Fragment() {
 
     //Shared
     lateinit var sharedPrefUtils: SharedPrefUtils
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
