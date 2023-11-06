@@ -107,7 +107,8 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 d.id,
                                 publication.location,
                                 publication.dog.adopted,
-                                d.getDate("timestamp")!!
+                                d.getDate("timestamp")!!,
+                                publication.dog.images[0]
                             )
                             Log.d("Alo",dog.createDate.toString())
                             cardList.add(dog)
