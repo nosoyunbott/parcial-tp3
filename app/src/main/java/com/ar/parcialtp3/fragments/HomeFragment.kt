@@ -79,6 +79,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         // Set an item click listener for handling selection
         searchEditText.setOnItemClickListener { parent, view, position, id ->
+            cardList.clear()
             val selectedSuggestion = parent.getItemAtPosition(position).toString()
             firebaseService.getPublicationsByBreedOrSubreed(selectedSuggestion){ documents, exception ->
                 if (exception == null) {
@@ -185,6 +186,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     // Function to fetch suggestions based on user input
     private suspend fun fetchSuggestions(input: String) {
         // Check if suggestions for the input are available in the cache
+
         val cachedSuggestions = getCachedSuggestions(input)
         if (cachedSuggestions != null) {
 
@@ -192,8 +194,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             suggestionAdapter.addAll(cachedSuggestions)
             suggestionAdapter.notifyDataSetChanged()
         } else {
-
-            val breeds:List<Breed> = dogServiceAPI.getAllBreeds()
+           val breeds:List<Breed> = dogServiceAPI.getAllBreeds()
 
             val breedSet = mutableSetOf<String>()
 
