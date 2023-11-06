@@ -73,7 +73,6 @@ class CardAdapter(
 
         val cardImage = holder.getCardLayout().findViewById<ImageView>(R.id.card_image)
         val imageUrl = card.image
-//        val imageUrl = "https://images.unsplash.com/photo-1682686581221-c126206d12f0?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .into(cardImage)
