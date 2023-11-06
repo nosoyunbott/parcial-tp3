@@ -64,7 +64,7 @@ class CardAdapter(
                 .setImageResource(R.drawable.fav_icon)
         } else {
             holder.getFavoriteButton().findViewById<ImageButton>(R.id.favouriteBtn)
-                .setImageResource(R.drawable.unfaved_icon)
+                .setImageResource(R.drawable.favourite_disable)
         }
 
         if(card.adopted) {
