@@ -50,6 +50,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var breedFilter : String
     private lateinit var provinceFilter : String
     private lateinit var filteredList : MutableList<Card>
+    private var isAsc = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -224,7 +225,13 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         if(filteredList.isEmpty()){
             filteredList = cardList.toMutableList()
         }
-        filteredList.sortByDescending { it.createDate }
+        if(isAsc){
+            filteredList.sortBy { it.createDate }
+            isAsc = false
+        }else{
+            filteredList.sortByDescending { it.createDate }
+            isAsc = true
+        }
         cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
         recCardList.adapter = cardListAdapter
         cardListAdapter.notifyDataSetChanged()
