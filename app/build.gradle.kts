@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ar.parcialtp3"
-        minSdk = 27
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
-
-
+    //splash
+    implementation("com.airbnb.android:lottie:5.2.0")
 
 }

@@ -19,6 +19,9 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,14 +29,18 @@ import com.ar.parcialtp3.R
 import com.ar.parcialtp3.adapters.CardAdapter
 import com.ar.parcialtp3.domain.Breed
 import com.ar.parcialtp3.domain.Card
+import com.ar.parcialtp3.domain.Provinces
 import com.ar.parcialtp3.entities.PublicationEntity
 import com.ar.parcialtp3.listener.OnViewItemClickedListener
 import com.ar.parcialtp3.services.DogDataService
 import com.ar.parcialtp3.services.firebase.FirebaseService
 import com.ar.parcialtp3.utils.SharedPrefUtils
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.google.android.material.snackbar.Snackbar
+
 
 
 class HomeFragment : Fragment(), OnViewItemClickedListener {
@@ -47,12 +54,25 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var dogServiceAPI: DogDataService
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var filterContainer: LinearLayout
+    private lateinit var subBreedSet:MutableSet<String>
+    private lateinit var breedSet:MutableSet<String>
 
     private lateinit var recCardList: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var cardList: MutableList<Card> = ArrayList()
     private lateinit var cardListAdapter: CardAdapter
     lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var moreFiltersTextView: TextView
+    private lateinit var clearFiltersTextView: TextView
+    private lateinit var createDateTextView: TextView
+    private lateinit var provinceTextView: TextView
+
+    private lateinit var breedFilter : String
+    private lateinit var subBreedFilter : String
+    private lateinit var provinceFilter : String
+    private lateinit var filteredList : MutableList<Card>
+    private var isAsc = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,77 +82,22 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         dogServiceAPI= DogDataService()
         recCardList = v.findViewById(R.id.cardRecyclerView)
         filterContainer = v.findViewById(R.id.filterContainer)
+
         sharedPreferences =
             requireContext().getSharedPreferences("search_suggestions", Context.MODE_PRIVATE)
+
+        moreFiltersTextView = v.findViewById(R.id.moreFiltersTextView)
+        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
+        createDateTextView = v.findViewById(R.id.createDateTextView)
+        provinceTextView = v.findViewById(R.id.provinceTextView)
+
 
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.actionBar?.setHomeButtonEnabled(true)
 
 
-        // Find the AutoCompleteTextView by ID
-        searchEditText = v.findViewById(R.id.searchEditText)
-
-        // Initialize and set up the suggestion adapter
-        suggestionAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line)
-        searchEditText.setAdapter(suggestionAdapter)
 
 
-        // Set an item click listener for handling selection
-        searchEditText.setOnItemClickListener { parent, view, position, id ->
-            cardList.clear()
-            val selectedSuggestion = parent.getItemAtPosition(position).toString()
-            firebaseService.getPublicationsByBreedOrSubreed(selectedSuggestion){ documents, exception ->
-                if (exception == null) {
-                    if (documents != null) {
-                        publications =
-                            documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
-                        Log.d("SERVICE", publications.toString())
-                        for (d in documents) {
-                            val publication = d.toObject(PublicationEntity::class.java)
-                            if (publication != null) {
-                                val dog = Card(
-                                    publication.dog.name,
-                                    publication.dog.breed,
-                                    publication.dog.subBreed,
-                                    publication.dog.age,
-                                    publication.dog.sex,
-                                    d.id
-                                )
-                                cardList.add(dog)
-                            }
-                        }
-                    }
-                } else {
-                    Log.d("asd", "No hay publications")
-                }
-                cardListAdapter.notifyDataSetChanged()
-            }
-        }
-
-
-        // Set a text change listener for debouncing and fetching suggestions
-        searchEditText.addTextChangedListener(object : TextWatcher {
-
-
-            override fun afterTextChanged(s: Editable?) {
-                // Implement your debouncing logic here
-                handler.removeCallbacksAndMessages(null)
-                handler.postDelayed({
-                    // This code will be executed after a delay (e.g., 500ms) of no input
-                    val input = s.toString()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        fetchSuggestions(input)
-                    }
-                }, 500) // Adjust the delay time as needed
-            }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                return;
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                return;
-            }
-        })
 
         return v
     }
@@ -142,13 +107,23 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         recCardList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recCardList.layoutManager = linearLayoutManager
-        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _->
+        subBreedSet=mutableSetOf()
+        breedSet=mutableSetOf()
+
+
+        provinceFilter = ""
+        breedFilter = ""
+        subBreedFilter=""
+        filteredList = mutableListOf()
+
+        cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
             val itemOnList = cardList.indexOfFirst { it.id == id }
             cardListAdapter.notifyItemChanged(itemOnList)
 
         })
         recCardList.adapter = cardListAdapter
+
 
         cardList.clear()
 
@@ -157,7 +132,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 if (documents != null) {
                     publications =
                         documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
-                    Log.d("SERVICE", publications.toString())
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
                         if (publication != null) {
@@ -167,25 +141,95 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.subBreed,
                                 publication.dog.age,
                                 publication.dog.sex,
-                                d.id
+                                d.id,
+                                publication.location,
+                                publication.dog.adopted,
+                                d.getDate("timestamp")!!
                             )
+                            Log.d("Alo",dog.createDate.toString())
                             cardList.add(dog)
                         }
                     }
                 }
             } else {
-                Log.d("asd", "No hay publications")
+                Snackbar.make(v, "No hay publicaciones disponibles", Snackbar.LENGTH_SHORT).show()
             }
             cardListAdapter.notifyDataSetChanged()
+            refreshRecyclerView()
         }
-        Handler().postDelayed({ refreshRecyclerView() }, 2500)
-        //TODO Mejorar esto a una coroutina porque me crasheo un par de veces, lo tuve que pasar a 2500ms
+        moreFiltersTextView.setOnClickListener { view ->
+            val popupMenu = PopupMenu(requireContext(), view)
+            val provincesArray = Provinces().getList()
+
+            for (province in provincesArray) {
+                popupMenu.menu.add(province)
+            }
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                provinceFilter = menuItem.title.toString()
+                provinceTextView.text = provinceFilter
+                provinceTextView.visibility = View.VISIBLE
+                filterCardList(provinceFilter, breedFilter,subBreedFilter)
+                true
+            }
+
+            popupMenu.show()
+        }
+
+        createDateTextView.setOnClickListener{
+            orderCardList()
+        }
+
+        searchEditText = v.findViewById(R.id.searchEditText)
+
+
+        suggestionAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line)
+        searchEditText.setAdapter(suggestionAdapter)
+
+
+
+        searchEditText.setOnItemClickListener { parent, view, position, id ->
+            filteredList.clear()
+
+            val selectedSuggestion = parent.getItemAtPosition(position).toString()
+            Log.d("breedSet",breedSet.toString())
+            if(breedSet.contains(selectedSuggestion))
+            {
+                breedFilter=selectedSuggestion.toUpperCase();
+            }
+            else
+            {
+                subBreedFilter=selectedSuggestion.toUpperCase();
+            }
+
+            filterCardList(provinceFilter,breedFilter,subBreedFilter)
+        }
+
+
+
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+
+
+            override fun afterTextChanged(s: Editable?) {
+                val input = s.toString()
+
+                lifecycleScope.launch {
+                    fetchSuggestions(input)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                return;
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                return;
+            }
+        })
     }
 
 
-    // Function to fetch suggestions based on user input
+
     private suspend fun fetchSuggestions(input: String) {
-        // Check if suggestions for the input are available in the cache
 
         val cachedSuggestions = getCachedSuggestions(input)
         if (cachedSuggestions != null) {
@@ -196,26 +240,34 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         } else {
            val breeds:List<Breed> = dogServiceAPI.getAllBreeds()
 
-            val breedSet = mutableSetOf<String>()
+            val allBreedSet = mutableSetOf<String>()
+
+            /*
+             subBreedSet=mutableSetOf()
+             breedSet=mutableSetOf()
+             */
 
             for (breed in breeds) {
+                allBreedSet.add(breed.name)
+                allBreedSet.addAll(breed.subBreeds)
                 breedSet.add(breed.name)
-                breedSet.addAll(breed.subBreeds)
+                subBreedSet.addAll(breed.subBreeds)
+
             }
 
-            val breedList = breedSet.toList()
+            val allBreedList = allBreedSet.toList()
 
 
-            cacheSuggestions(input, breedList)
+            cacheSuggestions(input, allBreedList)
             suggestionAdapter.clear()
-            suggestionAdapter.addAll(breedList)
+            suggestionAdapter.addAll(allBreedList)
             suggestionAdapter.notifyDataSetChanged()
 
 
         }
     }
 
-    // Function to retrieve cached suggestions
+
     private fun getCachedSuggestions(input: String): List<String>? {
         val cachedSuggestions = sharedPreferences.getStringSet(input, null)
         return cachedSuggestions?.toList()
@@ -265,13 +317,9 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             layoutParams.setMargins(30, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
 
-            var isClicked = false
-
             btnFilter.setOnClickListener {
-                val filteredList =
-                    cardList.filter { it.breed == filterName } as MutableList
-                cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position ->})
-                recCardList.adapter = cardListAdapter
+                breedFilter = filterName
+                filterCardList(provinceFilter, breedFilter,subBreedFilter)
 
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
 
@@ -280,7 +328,37 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 selectedButton = btnFilter
             }
 
+            clearFiltersTextView.setOnClickListener {
+                provinceFilter = ""
+                breedFilter = ""
+                subBreedFilter=""
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+                cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position -> })
+                recCardList.adapter = cardListAdapter
+                filteredList = cardList.toMutableList()
+                provinceTextView.visibility = View.GONE
+            }
+
             filterContainer.addView(btnFilter)
+        }
+    }
+
+    private fun filterCardList(province: String, breed: String,subBreed:String) {
+        filteredList = cardList.toMutableList()
+        if(province.isNotEmpty()){
+            filteredList = filteredList.filter { it.location == province } as MutableList
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            recCardList.adapter = cardListAdapter
+        }
+        if(breed.isNotEmpty()){
+            filteredList = filteredList.filter { it.breed == breed } as MutableList
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            recCardList.adapter = cardListAdapter
+        }
+        if(subBreed.isNotEmpty()){
+            filteredList = filteredList.filter { it.subBreed == subBreed } as MutableList
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            recCardList.adapter = cardListAdapter
         }
     }
 
@@ -288,5 +366,21 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(card.id)
         val navController = v.findNavController()
         navController.navigate(action)
+    }
+
+    private fun orderCardList(){
+        if(filteredList.isEmpty()){
+            filteredList = cardList.toMutableList()
+        }
+        if(isAsc){
+            filteredList.sortBy { it.createDate }
+            isAsc = false
+        }else{
+            filteredList.sortByDescending { it.createDate }
+            isAsc = true
+        }
+        cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+        recCardList.adapter = cardListAdapter
+        cardListAdapter.notifyDataSetChanged()
     }
 }
