@@ -2,6 +2,7 @@ package com.ar.parcialtp3
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.media.Image
@@ -13,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -104,24 +106,28 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
 
-        bottomNavigation.setOnItemSelectedListener {item ->
-            when(item.itemId){
-                R.id.homeFragment ->{
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
                     navHostFragment.navController.popBackStack(R.id.homeFragment, false)
                     true
                 }
+
                 R.id.favouritesFragment -> {
                     navHostFragment.navController.navigate(R.id.favouritesFragment)
                     true
                 }
+
                 R.id.adoptionFragment -> {
                     navHostFragment.navController.navigate(R.id.adoptionFragment)
                     true
                 }
+
                 R.id.publishFragment -> {
                     navHostFragment.navController.navigate(R.id.publishFragment)
                     true
                 }
+
                 else -> false
             }
         }
