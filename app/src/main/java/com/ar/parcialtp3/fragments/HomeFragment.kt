@@ -211,11 +211,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
 
             override fun afterTextChanged(s: Editable?) {
-                val input = s.toString()
+                handler.postDelayed({  lifecycleScope.launch {
+                    fetchSuggestions()
+                }},500)
 
-                lifecycleScope.launch {
-                    fetchSuggestions(input)
-                }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 return;
@@ -229,24 +228,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
 
 
-    private suspend fun fetchSuggestions(input: String) {
-
-        val cachedSuggestions = getCachedSuggestions(input)
-        if (cachedSuggestions != null) {
+    private suspend fun fetchSuggestions() {
 
             suggestionAdapter.clear()
-            suggestionAdapter.addAll(cachedSuggestions)
             suggestionAdapter.notifyDataSetChanged()
-        } else {
            val breeds:List<Breed> = dogServiceAPI.getAllBreeds()
-
-            val allBreedSet = mutableSetOf<String>()
-
-            /*
-             subBreedSet=mutableSetOf()
-             breedSet=mutableSetOf()
-             */
-
+           val allBreedSet = mutableSetOf<String>()
             for (breed in breeds) {
                 allBreedSet.add(breed.name)
                 allBreedSet.addAll(breed.subBreeds)
@@ -257,29 +244,14 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
             val allBreedList = allBreedSet.toList()
 
-
-            cacheSuggestions(input, allBreedList)
             suggestionAdapter.clear()
             suggestionAdapter.addAll(allBreedList)
             suggestionAdapter.notifyDataSetChanged()
 
-
-        }
-    }
-
-
-    private fun getCachedSuggestions(input: String): List<String>? {
-        val cachedSuggestions = sharedPreferences.getStringSet(input, null)
-        return cachedSuggestions?.toList()
     }
 
 
 
-    private fun cacheSuggestions(input: String, suggestions: List<String>) {
-        val editor = sharedPreferences.edit()
-        editor.putStringSet(input, suggestions.toSet())
-        editor.apply()
-    }
 
     private fun refreshRecyclerView() {
 
