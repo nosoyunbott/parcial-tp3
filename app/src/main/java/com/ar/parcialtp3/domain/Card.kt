@@ -2,8 +2,10 @@ package com.ar.parcialtp3.domain
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.sql.Timestamp
+import java.util.Date
 
-class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, id: String?, location: String?, adopted: Boolean?): Parcelable {
+class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, id: String?, location: String?, adopted: Boolean?, createDate: Date?): Parcelable {
 
     var name: String = ""
     var breed: String = ""
@@ -13,6 +15,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
     var id: String = ""
     var location: String = ""
     var adopted: Boolean = false
+    var createDate: Date? = null
 //    var image: String = ""
 
 
@@ -24,7 +27,8 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readBoolean()
+        parcel.readBoolean(),
+        Date(parcel.readLong())
     )
 
     init {
@@ -36,6 +40,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         this.id = id!!
         this.location = location!!
         this.adopted = adopted!!
+        this.createDate = createDate
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -46,6 +51,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.writeString(sex)
         parcel.writeString(location)
         parcel.writeBoolean(adopted)
+        createDate?.let { parcel.writeLong(it.time) }
     }
 
     override fun describeContents(): Int {

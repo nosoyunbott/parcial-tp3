@@ -61,7 +61,8 @@ class AdoptionFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.sex,
                                 d.id,
                                 publication.location,
-                                publication.dog.adopted
+                                publication.dog.adopted,
+                                d.getDate("timestamp")!!
                             )
                             cardList.add(dog)
                         }

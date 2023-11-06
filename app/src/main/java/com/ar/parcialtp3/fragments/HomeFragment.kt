@@ -49,7 +49,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
     private lateinit var breedFilter : String
     private lateinit var provinceFilter : String
-    private lateinit var btnFilter : Button
+    private lateinit var filteredList : MutableList<Card>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +77,7 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
 
         provinceFilter = ""
         breedFilter = ""
+        filteredList = mutableListOf()
 
         cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->
             SharedPrefUtils(requireContext()).toggleFavorite(id)
@@ -93,7 +94,6 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 if (documents != null) {
                     publications =
                         documents.mapNotNull { it.toObject(PublicationEntity::class.java) }
-                    Log.d("SERVICE", publications.toString())
                     for (d in documents) {
                         val publication = d.toObject(PublicationEntity::class.java)
                         if (publication != null) {
@@ -105,8 +105,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                                 publication.dog.sex,
                                 d.id,
                                 publication.location,
-                                publication.dog.adopted
+                                publication.dog.adopted,
+                                d.getDate("timestamp")!!
                             )
+                            Log.d("Alo",dog.createDate.toString())
                             cardList.add(dog)
                         }
                     }
@@ -125,13 +127,16 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 popupMenu.menu.add(province)
             }
             popupMenu.setOnMenuItemClickListener { menuItem ->
-                // Cuando se selecciona una provincia del menú emergente
                 provinceFilter = menuItem.title.toString()
                 filterCardList(provinceFilter, breedFilter)
                 true
             }
 
             popupMenu.show()
+        }
+
+        createDateTextView.setOnClickListener{
+            orderCardList()
         }
     }
 
@@ -187,14 +192,16 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 breedFilter = ""
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
                 cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, position -> })
-                recCardList.adapter = cardListAdapter        }
+                recCardList.adapter = cardListAdapter
+                filteredList = cardList.toMutableList()
+            }
 
             filterContainer.addView(btnFilter)
         }
     }
 
     private fun filterCardList(province: String, breed: String) {
-        var filteredList = cardList
+        filteredList = cardList.toMutableList()
         if(province.isNotEmpty()){
             filteredList = filteredList.filter { it.location == province } as MutableList
             cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
@@ -211,5 +218,15 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2(card.id)
         val navController = v.findNavController()
         navController.navigate(action)
+    }
+
+    private fun orderCardList(){
+        if(filteredList.isEmpty()){
+            filteredList = cardList.toMutableList()
+        }
+        filteredList.sortByDescending { it.createDate }
+        cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+        recCardList.adapter = cardListAdapter
+        cardListAdapter.notifyDataSetChanged()
     }
 }

@@ -9,7 +9,7 @@ class PublicationEntity (
     val owner: Owner,
     val location: String,
     val description: String,
-    val timestamp : Timestamp
+    val createDate : Timestamp
 ){
     constructor() : this(Dog(), Owner(), "", "", Timestamp.now())
 }
