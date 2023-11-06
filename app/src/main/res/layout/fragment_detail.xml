@@ -20,22 +20,24 @@
 
     <TextView
         android:id="@+id/txtDetailName"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Nombre"
+        android:text=""
         android:textSize="26dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgCarrousel" />
 
     <TextView
         android:id="@+id/txtDetailLocation"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:text="Buenos Aires"
+        android:text=""
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/txtDetailName" />
 
@@ -51,10 +53,11 @@
 
     <TextView
         android:id="@+id/txtDetailEdad"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:text="Edad"
+        android:text=""
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,10 +65,11 @@
 
     <TextView
         android:id="@+id/txtDetailGender"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Male"
+        android:text=""
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/imageView4" />
@@ -75,6 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_regular"
         android:text="Sex"
         android:textSize="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -94,16 +99,18 @@
 
     <TextView
         android:id="@+id/txtDetailWeight"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="2kg"
+        android:text=""
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/txtDetailWeightDefault"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -187,7 +194,7 @@
             android:id="@+id/imgDetailOwner"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@null"
             app:layout_constraintBottom_toTopOf="@+id/guideline9"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -215,6 +222,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Dueño"
+        android:fontFamily="@font/poppins_regular"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
@@ -223,15 +231,16 @@
         android:id="@+id/txtDetailUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre del dueño"
+        android:fontFamily="@font/poppins_semibold"
+        android:text=""
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
         app:layout_constraintTop_toBottomOf="@+id/txtDetailOwner" />
 
     <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:id="@+id/imgDetailPhone"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:layout_marginEnd="24dp"
         android:src="@drawable/phone_icon"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
@@ -243,10 +252,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ADOPTAR"
+        android:fontFamily="@font/poppins_semibold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
+
+    <TextView
+        android:id="@+id/txtDetailDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="34dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/btnDetailAdopt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

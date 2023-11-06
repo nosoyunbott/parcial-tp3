@@ -3,13 +3,15 @@ package com.ar.parcialtp3.domain
 import android.os.Parcel
 import android.os.Parcelable
 
-class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?): Parcelable {
+class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: String?, id: String?, adopted: Boolean?): Parcelable {
 
     var name: String = ""
     var breed: String = ""
     var subBreed: String = ""
     var age: Int = 0
     var sex: String = ""
+    var id: String = ""
+    var adopted: Boolean = false
 //    var image: String = ""
 
 
@@ -19,7 +21,8 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
-//        parcel.readString()
+        parcel.readString(),
+        parcel.readBoolean()
     )
 
     init {
@@ -28,6 +31,8 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         this.subBreed = subBreed!!
         this.age = age!!
         this.sex = sex!!
+        this.id = id!!
+        this.adopted = adopted!!
 
     }
 
@@ -37,6 +42,7 @@ class Card(name: String?, breed: String?, subBreed: String?, age: Int?, sex: Str
         parcel.writeString(subBreed)
         parcel.writeInt(age)
         parcel.writeString(sex)
+        parcel.writeBoolean(adopted)
     }
 
     override fun describeContents(): Int {

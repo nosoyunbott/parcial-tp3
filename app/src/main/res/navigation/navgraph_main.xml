@@ -8,22 +8,46 @@
         android:id="@+id/homeFragment"
         android:name="com.ar.parcialtp3.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment2"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/publishFragment"
         android:name="com.ar.parcialtp3.fragments.PublishFragment"
         android:label="fragment_publish"
-        tools:layout="@layout/fragment_publish" />
+        tools:layout="@layout/fragment_publish" >
+        <action
+            android:id="@+id/action_publishFragment_self"
+            app:destination="@id/publishFragment"
+            app:popUpTo="@id/publishFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_publishFragment_to_photoSelectionFragment"
+            app:destination="@id/photoSelectionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.ar.parcialtp3.fragments.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="publicationId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_detailFragment_to_adoptionFragment"
+            app:destination="@id/adoptionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="com.ar.parcialtp3.fragments.FavouritesFragment"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_favouritesFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.ar.parcialtp3.fragments.SettingsFragment"
@@ -38,5 +62,14 @@
         android:id="@+id/adoptionFragment"
         android:name="com.ar.parcialtp3.fragments.AdoptionFragment"
         android:label="fragment_adoption"
-        tools:layout="@layout/fragment_adoption" />
+        tools:layout="@layout/fragment_adoption" >
+        <action
+            android:id="@+id/action_adoptionFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoSelectionFragment"
+        android:name="com.ar.parcialtp3.fragments.PhotoSelectionFragment"
+        android:label="PhotoSelectionFragment" />
+
 </navigation>

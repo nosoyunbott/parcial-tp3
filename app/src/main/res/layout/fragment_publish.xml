@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/publishLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="55sp">
 
 
     <TextView
@@ -12,17 +14,20 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="35sp"
-        android:text="Publica tu mascota" />
+        android:text="Publica tu mascota"
+        android:fontFamily="@font/poppins_semibold"/>
 
     <EditText
         android:id="@+id/edtAge"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_below="@+id/txtRegister"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="18dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:inputType="number"
+        android:fontFamily="@font/poppins_regular"
         android:hint="Edad"
         android:layout_centerHorizontal="true" />
 
@@ -46,6 +51,7 @@
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
         android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_regular"
         android:hint="Nombre" />
     <TextView
         android:id="@+id/errNameEdt"
@@ -63,6 +69,7 @@
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
+        android:fontFamily="@font/poppins_regular"
         android:paddingStart="12dp"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -75,6 +82,7 @@
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
+        android:fontFamily="@font/poppins_regular"
         android:paddingStart="12dp"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -88,6 +96,7 @@
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
+        android:fontFamily="@font/poppins_regular"
         android:paddingStart="12dp"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -103,6 +112,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_centerHorizontal="true"
         android:hint="Descripcion" />
 
@@ -117,7 +127,7 @@
         android:visibility="gone" />
 
     <EditText
-        android:id="@+id/edtObservation"
+        android:id="@+id/edtWeight"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_below="@+id/txtErrDescription"
@@ -125,28 +135,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:inputType="number"
         android:layout_centerHorizontal="true"
-        android:hint="Observacion" />
-
-    <TextView
-        android:id="@+id/txtErrObservation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Mail invalido"
-        android:layout_below="@+id/edtObservation"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
-    <EditText
-        android:id="@+id/edtWeight"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/txtErrObservation"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_regular"
         android:hint="Peso" />
 
     <TextView
@@ -158,40 +149,25 @@
         android:layout_below="@+id/edtWeight"
         android:textColor="#FF0000"
         android:visibility="gone" />
-    <LinearLayout
-        android:id="@+id/layoutPhotos"
+
+
+    <Button
+        android:id="@+id/btnAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@+id/errWeightEdt"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true">
-
-    <EditText
-        android:id="@+id/edtPhotos"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/errWeightEdt"
-        android:paddingStart="12dp"
-        android:inputType="textMultiLine"
+        android:layout_marginTop="12dp"
         android:layout_centerHorizontal="true"
-        android:hint="Ingrese la url de la foto"/>
-        <Button
-            android:id="@+id/btnAddPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"></Button>
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Agregar Fotos" />
 
-    </LinearLayout>
+
     <RadioGroup
         android:id="@+id/radioGroupGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/layoutPhotos"
+        android:layout_below="@+id/btnAddPhoto"
         android:layout_marginTop="17dp">
 
         <LinearLayout
@@ -203,6 +179,7 @@
                 android:id="@+id/radioButtonMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
                 android:text="Macho"
                 />
 
@@ -210,6 +187,7 @@
                 android:id="@+id/radioButtonFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
                 android:text="Hembra"
                 />
         </LinearLayout>
@@ -223,6 +201,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_semibold"
         android:text="REGISTRATE"
         />
 

@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/layoutImages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AdoptionFragment">
+    tools:context=".fragments.FavouritesFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,26 +15,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="55sp">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
+            android:paddingTop="55sp"
+            android:paddingBottom="55sp"
+            >
+            <Button
+                android:id="@+id/btnUploadPhotos"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Adoptados"
-                android:gravity="center_horizontal"
-                android:textSize="30sp"
-                android:fontFamily="@font/poppins_semibold"/>
-
-
+                android:layout_marginHorizontal="150sp"
+                android:text="Subir"></Button>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/adoptionRecyclerView"
+                android:id="@+id/rec_imageCard_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="72dp" />
+                android:layout_height="match_parent" >
+
+            </androidx.recyclerview.widget.RecyclerView>
+
         </LinearLayout>
 
-    </FrameLayout>
 
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

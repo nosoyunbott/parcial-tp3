@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="bottom"
-    android:paddingLeft="10dp"
+    android:paddingLeft="20dp"
     android:orientation="vertical"
     android:paddingTop="28dp">
 
@@ -26,8 +26,7 @@
             android:layout_height="60dp"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="15dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:background="@drawable/rounded_image"/>
+            android:src="@null" />
 
         </androidx.cardview.widget.CardView>
 
@@ -42,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Bienvenido!"
-                android:textColor="#000000"
+                android:fontFamily="@font/poppins_regular"
                 android:textStyle="normal" />
 
             <TextView
@@ -50,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text=""
-                android:textColor="#000000"
                 android:textStyle="bold"/>
         </LinearLayout>
 

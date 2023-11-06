@@ -1,6 +1,10 @@
 package com.ar.parcialtp3.holders
 
+
+import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -29,9 +33,10 @@ class CardHolder(v: View) : RecyclerView.ViewHolder(v) {
         txt.text = subBreed
     }
 
+    @SuppressLint("SetTextI18n")
     fun setAge(age: Int ) {
         val txt : TextView = view.findViewById(R.id.card_age)
-        txt.text = age.toString()
+        txt.text = "$age / "
     }
 
     fun setSex(sex: String ) {
@@ -39,10 +44,9 @@ class CardHolder(v: View) : RecyclerView.ViewHolder(v) {
         txt.text = sex
     }
 
-//    fun setImage(image: String ) {
-//        val txt : TextView = view.findViewById(R.id.card_image)
-//        txt.text = image
-//    }
+    fun getFavoriteButton(): ImageButton {
+        return view.findViewById(R.id.favouriteBtn)
+    }
 
     fun getCardLayout (): CardView {
         return view.findViewById(R.id.card)
