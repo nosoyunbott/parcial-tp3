@@ -20,7 +20,7 @@
     <EditText
         android:id="@+id/edtAge"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/txtRegister"
         android:layout_marginTop="18dp"
         android:layout_marginStart="16dp"
@@ -31,20 +31,11 @@
         android:hint="Edad"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/errAgeEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Edad Invalida"
-        android:layout_below="@+id/edtAge"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
 
     <EditText
         android:id="@+id/edtName"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/edtAge"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -53,20 +44,12 @@
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/poppins_regular"
         android:hint="Nombre" />
-    <TextView
-        android:id="@+id/errNameEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Apellido invalido"
-        android:layout_below="@+id/edtName"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
+
     <Spinner
         android:id="@+id/spnBreed"
         android:layout_width="300dp"
-        android:layout_below="@+id/errNameEdt"
-        android:layout_height="45dp"
+        android:layout_below="@+id/edtName"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -79,7 +62,7 @@
         android:id="@+id/spnSubBreed"
         android:layout_width="300dp"
         android:layout_below="@+id/spnBreed"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -93,7 +76,7 @@
         android:id="@+id/spnLocation"
         android:layout_width="300dp"
         android:layout_below="@+id/spnSubBreed"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -106,7 +89,7 @@
     <EditText
         android:id="@+id/edtDescription"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/spnLocation"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -116,50 +99,32 @@
         android:layout_centerHorizontal="true"
         android:hint="Descripcion" />
 
-    <TextView
-        android:id="@+id/txtErrDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Descripcion invalida"
-        android:layout_below="@+id/edtDescription"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
 
     <EditText
         android:id="@+id/edtWeight"
         android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/txtErrDescription"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:inputType="number"
+        android:layout_height="48dp"
+        android:layout_below="@+id/edtDescription"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/poppins_regular"
-        android:hint="Peso" />
-
-    <TextView
-        android:id="@+id/errWeightEdt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Peso invalido"
-        android:layout_below="@+id/edtWeight"
-        android:textColor="#FF0000"
-        android:visibility="gone" />
-
+        android:hint="Peso"
+        android:inputType="number"
+        android:paddingStart="12dp" />
 
     <Button
         android:id="@+id/btnAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/errWeightEdt"
+        android:layout_below="@+id/edtWeight"
         android:layout_marginTop="12dp"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Agregar Fotos" />
+        android:text="Agregar Fotos"
+        android:background="@drawable/rounded_violet_background"
+        />
 
 
     <RadioGroup
@@ -203,6 +168,8 @@
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/poppins_semibold"
         android:text="REGISTRATE"
+        android:background="@drawable/rounded_violet_background"
+        android:textSize="16dp"
         />
 
 
