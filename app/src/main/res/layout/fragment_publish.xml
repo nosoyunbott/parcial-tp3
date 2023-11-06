@@ -20,7 +20,7 @@
     <EditText
         android:id="@+id/edtAge"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/txtRegister"
         android:layout_marginTop="18dp"
         android:layout_marginStart="16dp"
@@ -35,7 +35,7 @@
     <EditText
         android:id="@+id/edtName"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/edtAge"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -49,7 +49,7 @@
         android:id="@+id/spnBreed"
         android:layout_width="300dp"
         android:layout_below="@+id/edtName"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -62,7 +62,7 @@
         android:id="@+id/spnSubBreed"
         android:layout_width="300dp"
         android:layout_below="@+id/spnBreed"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -76,7 +76,7 @@
         android:id="@+id/spnLocation"
         android:layout_width="300dp"
         android:layout_below="@+id/spnSubBreed"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:autofillHints="Raza"
         android:fontFamily="@font/poppins_regular"
@@ -89,7 +89,7 @@
     <EditText
         android:id="@+id/edtDescription"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/spnLocation"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
@@ -100,20 +100,19 @@
         android:hint="Descripcion" />
 
 
-
     <EditText
         android:id="@+id/edtWeight"
         android:layout_width="300dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/edtDescription"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:inputType="number"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/poppins_regular"
-        android:hint="Peso" />
+        android:hint="Peso"
+        android:inputType="number"
+        android:paddingStart="12dp" />
 
     <Button
         android:id="@+id/btnAddPhoto"
@@ -170,7 +169,7 @@
         android:fontFamily="@font/poppins_semibold"
         android:text="REGISTRATE"
         android:background="@drawable/rounded_violet_background"
-
+        android:textSize="16dp"
         />
 
 
