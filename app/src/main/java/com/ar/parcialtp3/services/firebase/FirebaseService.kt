@@ -42,24 +42,6 @@ class FirebaseService {
             }
     }
 
-    fun getPublicationsOrderedByDate(
-        isAdopted: Boolean,
-        callback: (List<DocumentSnapshot>?, Exception?) -> Unit
-    ) {
-        db.collection("Publications")
-            .whereEqualTo("dog.adopted", isAdopted).orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val result: QuerySnapshot? = task.result
-                    callback(result?.documents, null)
-                } else {
-                    callback(null, task.exception)
-                }
-            }
-    }
-
-
     fun savePublication(publication: PublicationEntity): Task<Void> {
 
         val publicationRef = db.collection("Publications")

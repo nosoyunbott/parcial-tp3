@@ -1,7 +1,5 @@
 package com.ar.parcialtp3.fragments
 
-import ImageCardAdapter
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -18,14 +16,11 @@ import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.ar.parcialtp3.R
 import com.ar.parcialtp3.SharedViewModel
-import com.ar.parcialtp3.domain.Card
 import com.ar.parcialtp3.domain.Dog
 import com.ar.parcialtp3.domain.Owner
 import com.ar.parcialtp3.domain.Provinces
@@ -37,9 +32,6 @@ import com.google.firebase.Timestamp
 import com.ar.parcialtp3.services.firebase.FirebaseService
 
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
-import java.time.LocalDate
-import java.util.Date
 
 class PublishFragment : Fragment() {
 
@@ -61,7 +53,7 @@ class PublishFragment : Fragment() {
 
     lateinit var radioButtonMale: RadioButton
     lateinit var radioButtonFemale: RadioButton
-    lateinit var btnPubish: Button
+    lateinit var btnPublish: Button
     lateinit var btnAddPhoto: Button
     lateinit var photosList: MutableList<String>
 
@@ -119,7 +111,7 @@ class PublishFragment : Fragment() {
         edtWeight = v.findViewById(R.id.edtWeight)
         radioButtonMale = v.findViewById(R.id.radioButtonMale)
         radioButtonFemale = v.findViewById(R.id.radioButtonFemale)
-        btnPubish = v.findViewById(R.id.btnPublish)
+        btnPublish = v.findViewById(R.id.btnPublish)
         btnAddPhoto = v.findViewById(R.id.btnAddPhoto)
         selectedImages = mutableListOf()
 
@@ -134,12 +126,9 @@ class PublishFragment : Fragment() {
         spnBreeds = v.findViewById(R.id.spnBreed)
         spnSubBreeds = v.findViewById(R.id.spnSubBreed)
         lifecycleScope.launch {
-            //val hola = DogDataService().getImagesByBreed("hound")
             val allBreeds = DogDataService().getAllBreeds()
 
             breedsList = allBreeds.map { it.name.uppercase() }
-            //val imagesBySubBreed = DogDataService().getImagesBySubBreed("hound", "afghan")
-            // Log.d("imagesBySubBreed", imagesBySubBreed.toString())
             breedsAdapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, breedsList)
 
@@ -157,17 +146,14 @@ class PublishFragment : Fragment() {
             if (posSpnBreed != 0) {
                 spnBreeds.setSelection(posSpnBreed)
                 selectedBreed = breedsList[posSpnBreed]
-                Log.d("selected breed", selectedBreed)
             }
             if (posSpnSubBreed != 0) {
                 spnSubBreeds.setSelection(posSpnSubBreed)
                 selectedSubBreed = subBreedsList[posSpnSubBreed]
-                Log.d("selected ssssubbreed", selectedBreed)
             }
             if (posSpnProvince != 0) {
                 spnProvinces.setSelection(posSpnProvince)
                 selectedProvince = provincesList[posSpnProvince]
-                Log.d("selected province", selectedBreed)
             }
         }
 
@@ -182,29 +168,8 @@ class PublishFragment : Fragment() {
         }
         photosList = mutableListOf()
 
-        fireBaseService.getPublicationsOrderedByDate(false) { documents, exception ->
-            if (exception == null) {
-                if (documents != null) {
-                    for (d in documents) {
-                        val publication = d.toObject(PublicationEntity::class.java)
-                        if (publication != null) {
-                            Log.d("descripcion", publication.description)
-
-                        }
-                    }
-                }
-            } else {
-                Log.d("asd", exception.toString())
-            }
-        }
         handleRadioButtons()
-        btnPubish.setOnClickListener {
-            val temporaryImageArray = arrayListOf(
-                "https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg",
-                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg",
-                "https://images.dog.ceo/breeds/hound-afghan/n02088094_10715.jpg"
-            )
-
+        btnPublish.setOnClickListener {
             val name = edtName.text.toString()
             val age = edtAge.text.toString()
             val sex = selectedSex
@@ -232,9 +197,7 @@ class PublishFragment : Fragment() {
             val ownerPhone = sharedPreferences.getString("phone", "")?.toInt()
             val ownerImage = sharedPreferences.getString("image", "")
             val owner = Owner(ownerName!!, ownerPhone!!, ownerImage!!)
-            //val currentDate = Date()
             val timeStamp = Timestamp.now()
-            Log.d("timestamp", timeStamp.toString())
             val publication =
                 PublicationEntity(dog, owner, selectedProvince, edtDescription.text.toString(), timeStamp)
             fireBaseService.savePublication(publication)
@@ -294,12 +257,8 @@ class PublishFragment : Fragment() {
                     }
                 }
 
-
-
-
                 getSubBreedsOf(selectedBreed)
                 getImages(selectedBreed, selectedSubBreed)
-                Log.d("subred", selectedSubBreed)
 
             }
 
@@ -318,7 +277,6 @@ class PublishFragment : Fragment() {
                     selectedBreed.lowercase(),
                     selectedSubBreed.lowercase()
                 )
-                //  Log.d("imagesssss", images.toString())
             } else {
                 images = DogDataService().getImagesByBreed(selectedBreed.lowercase())
                 // Log.d("Images By Breed", images.toString())
@@ -327,7 +285,6 @@ class PublishFragment : Fragment() {
             btnAddPhoto.setOnClickListener {
                 val selectImages = images
                 sharedViewModel.selectedImages.value = selectImages
-                Log.d("ss", selectImages.toString())
                 val action =
                     PublishFragmentDirections.actionPublishFragmentToPhotoSelectionFragment()
                 val editor = sharedPreferences.edit()
@@ -353,7 +310,6 @@ class PublishFragment : Fragment() {
 
             }
             subBreedsAdapter.notifyDataSetChanged()
-            Log.d("array", breed?.subBreeds.toString())
         }
 
     }
