@@ -271,8 +271,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
                 breedFilter = ""
                 subBreedFilter = ""
                 selectedButton?.setBackgroundResource(R.drawable.button_transparent)
-                cardListAdapter =
-                    CardAdapter(cardList, this, onClickFavourite = { id, position -> })
+                cardListAdapter = CardAdapter(cardList, this, onClickFavourite = { id, _ ->
+                    onClickFav(id,cardList)
+
+                })
                 recCardList.adapter = cardListAdapter
                 filteredList = cardList.toMutableList()
                 provinceTextView.visibility = View.GONE
@@ -287,20 +289,26 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
         filteredList = cardList.toMutableList()
         if (province.isNotEmpty()) {
             filteredList = filteredList.filter { it.location.equals(province, ignoreCase = true) } as MutableList
-            cardListAdapter =
-                CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, _ ->
+                onClickFav(id,filteredList)
+
+            })
             recCardList.adapter = cardListAdapter
         }
         if (breed.isNotEmpty()) {
             filteredList = filteredList.filter { it.breed.equals(breed, ignoreCase = true) } as MutableList
-            cardListAdapter =
-                CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, _ ->
+                onClickFav(id,filteredList)
+
+            })
             recCardList.adapter = cardListAdapter
         }
         if (subBreed.isNotEmpty()) {
             filteredList = filteredList.filter { it.subBreed.equals(subBreed, ignoreCase = true) } as MutableList
-            cardListAdapter =
-                CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+            cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, _ ->
+                onClickFav(id,filteredList)
+
+            })
             recCardList.adapter = cardListAdapter
         }
         cardListAdapter.notifyDataSetChanged()
@@ -323,7 +331,10 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             filteredList.sortByDescending { it.createDate }
             isAsc = true
         }
-        cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, position -> })
+        cardListAdapter = CardAdapter(filteredList, this, onClickFavourite = { id, _ ->
+            onClickFav(id,filteredList)
+
+        })
         recCardList.adapter = cardListAdapter
         cardListAdapter.notifyDataSetChanged()
     }
@@ -344,5 +355,12 @@ class HomeFragment : Fragment(), OnViewItemClickedListener {
             breeds.add(breed.name)
             subBreeds.addAll(breed.subBreeds)
         }
+    }
+
+
+    private fun onClickFav(id: String, listOfCards: MutableList<Card>) {
+        SharedPrefUtils(requireContext()).toggleFavorite(id)
+        val itemOnList = listOfCards.indexOfFirst { it.id == id }
+        cardListAdapter.notifyItemChanged(itemOnList)
     }
 }

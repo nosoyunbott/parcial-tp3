@@ -2,6 +2,7 @@ package com.ar.parcialtp3.adapters
 
 import android.content.Context
 import android.opengl.Visibility
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,7 @@ class CardAdapter(
 
         holder.getFavoriteButton().setOnClickListener {
             onClickFavourite.invoke(card.id, position)
+            Log.d("id from holder", card.id)
         }
 
 
